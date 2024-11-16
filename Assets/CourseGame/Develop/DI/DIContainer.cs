@@ -21,7 +21,7 @@ namespace Assets.CourceGame.Develop.DI
                 throw new InvalidOperationException($"{typeof(T)} already register.");
 
             Registration registration = new Registration(container => creator(container));
-            _container.Add(typeof(T), registration);
+            _container[typeof(T)] = registration;
         }
 
         public T Resolve<T>()
