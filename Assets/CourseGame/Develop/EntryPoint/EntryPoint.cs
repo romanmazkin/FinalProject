@@ -1,10 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Assets.CourceGame.Develop.DI;
 using Assets.CourseGame.Develop.CommonServices.AssetsManagement;
 using Assets.CourseGame.Develop.CommonServices.CoroutinePerformer;
-using System.ComponentModel;
 using Assets.CourseGame.Develop.CommonServices.LoadingScreen;
+using Assets.CourseGame.Develop.CommonServices.SceneManagement;
+using System;
+using System.ComponentModel;
 
 namespace Assets.CourseGame.Develop.EntryPoint
 {
@@ -24,7 +25,10 @@ namespace Assets.CourseGame.Develop.EntryPoint
 
             RegisterResourcesAssetLoader(projectContainer);
             RegisterCoruotinePerrformer(projectContainer);
+
+            RegisterLoadingCurtain(projectContainer);
             RegisterSceneLoader(projectContainer);
+            RegisterSceneSwitcher(projectContainer);
 
             // all registrations done
 
@@ -55,7 +59,7 @@ namespace Assets.CourseGame.Develop.EntryPoint
             });
         }
 
-        private void RegisterSceneLoader(DIContainer container)
+        private void RegisterLoadingCurtain(DIContainer container)
         {
             container.RegisterAsSingle<ILoadingCurrtain>(c =>
             {
@@ -67,5 +71,15 @@ namespace Assets.CourseGame.Develop.EntryPoint
                 return Instantiate(standartLoadingCurtainPrefab);
             });
         }
+
+        private void RegisterSceneLoader(DIContainer container)
+            => container.RegisterAsSingle<ISceneLoader>(c => new DefaultSceneLoader());
+
+        private void RegisterSceneSwitcher(DIContainer container)
+            => container.RegisterAsSingle(c =>
+            new SceneSwitcher(c.Resolve<ICoroutinePerformer>(), 
+                c.Resolve<ILoadingCurrtain>(), 
+                c.Resolve<ISceneLoader>(), 
+                c));
     }
 }
