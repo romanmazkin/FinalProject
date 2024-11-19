@@ -1,7 +1,6 @@
 using Assets.CourceGame.Develop.DI;
 using Assets.CourseGame.Develop.CommonServices.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MainMenuBootstrap : MonoBehaviour
