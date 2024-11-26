@@ -5,6 +5,12 @@
         private readonly IDataSerializer _serializer;
         private readonly IDataRepository _repository;
 
+        public SaveLoadService(IDataSerializer serializer, IDataRepository repository)
+        {
+            _serializer = serializer;
+            _repository = repository;
+        }
+
         public void Save<TData>(TData data) where TData : ISaveData
         {
             string serializeData = _serializer.Serialize(data);

@@ -4,6 +4,7 @@ using UnityEngine;
 using Assets.CourceGame.Develop.DI;
 using Assets.CourseGame.Develop.CommonServices.LoadingScreen;
 using Assets.CourseGame.Develop.CommonServices.SceneManagement;
+using Assets.CourseGame.Develop.CommonServices.DataManagement.DataProviders;
 
 namespace Assets.CourseGame.Develop.EntryPoint
 {
@@ -19,6 +20,8 @@ namespace Assets.CourseGame.Develop.EntryPoint
             Debug.Log("Run services initialization");
 
             //initialize all services
+
+            container.Resolve<PlayerDataProvider>().Load();
 
             yield return new WaitForSeconds(1.5f);
 

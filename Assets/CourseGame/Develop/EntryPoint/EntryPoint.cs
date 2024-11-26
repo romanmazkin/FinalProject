@@ -4,8 +4,10 @@ using Assets.CourseGame.Develop.CommonServices.AssetsManagement;
 using Assets.CourseGame.Develop.CommonServices.CoroutinePerformer;
 using Assets.CourseGame.Develop.CommonServices.LoadingScreen;
 using Assets.CourseGame.Develop.CommonServices.SceneManagement;
+using Assets.CourseGame.Develop.CommonServices.DataManagement;
+using Assets.CourseGame.Develop.CommonServices.DataManagement.DataProviders;
 using System;
-using System.ComponentModel;
+using Assets.CourseGame.Develop.CommonServices.Wallet;
 
 namespace Assets.CourseGame.Develop.EntryPoint
 {
@@ -30,7 +32,13 @@ namespace Assets.CourseGame.Develop.EntryPoint
             RegisterSceneLoader(projectContainer);
             RegisterSceneSwitcher(projectContainer);
 
+            RegisterSaveLoadService(projectContainer);
+            RegisterPlayerDataProvider(projectContainer);
+
+            RegisterWalletService(projectContainer);
+
             // all registrations done
+            projectContainer.Initialize();
 
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
         }
@@ -41,10 +49,14 @@ namespace Assets.CourseGame.Develop.EntryPoint
             Application.targetFrameRate = 144;
         }
 
-        private void RegisterResourcesAssetLoader(DIContainer projectContainer)
-        {
-            projectContainer.RegisterAsSingle(c => new ResourcesAssetLoader());
-        }
+        private void RegisterWalletService(DIContainer container)
+            => container.RegisterAsSingle(c => new WalletService(c.Resolve<PlayerDataProvider>())).NonLazy();
+
+        private void RegisterPlayerDataProvider(DIContainer container)
+            => container.RegisterAsSingle(c => new PlayerDataProvider(c.Resolve<ISaveLoadService>()));
+
+        private void RegisterResourcesAssetLoader(DIContainer container)
+             => container.RegisterAsSingle(c => new ResourcesAssetLoader());
 
         private void RegisterCoruotinePerrformer(DIContainer container)
         {
@@ -72,14 +84,17 @@ namespace Assets.CourseGame.Develop.EntryPoint
             });
         }
 
+        private void RegisterSaveLoadService(DIContainer container)
+            => container.RegisterAsSingle<ISaveLoadService>(c => new SaveLoadService(new JsonSerializer(), new LocalDataRepository()));
+
         private void RegisterSceneLoader(DIContainer container)
             => container.RegisterAsSingle<ISceneLoader>(c => new DefaultSceneLoader());
 
         private void RegisterSceneSwitcher(DIContainer container)
             => container.RegisterAsSingle(c =>
-            new SceneSwitcher(c.Resolve<ICoroutinePerformer>(), 
-                c.Resolve<ILoadingCurrtain>(), 
-                c.Resolve<ISceneLoader>(), 
+            new SceneSwitcher(c.Resolve<ICoroutinePerformer>(),
+                c.Resolve<ILoadingCurrtain>(),
+                c.Resolve<ISceneLoader>(),
                 c));
     }
 }

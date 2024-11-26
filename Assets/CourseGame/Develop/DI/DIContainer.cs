@@ -1,9 +1,10 @@
+using Assets.CourseGame.Develop.DI;
 using System;
 using System.Collections.Generic;
 
 namespace Assets.CourceGame.Develop.DI
 {
-    public class DIContainer
+    public class DIContainer : IDisposable
     {
         private readonly Dictionary<Type, Registration> _container = new();
         private readonly DIContainer _parent;
@@ -15,13 +16,14 @@ namespace Assets.CourceGame.Develop.DI
 
         public DIContainer(DIContainer parent) => _parent = parent;
 
-        public void RegisterAsSingle<T>(Func<DIContainer, T> creator)
+        public Registration RegisterAsSingle<T>(Func<DIContainer, T> creator)
         {
             if (_container.ContainsKey(typeof(T)))
                 throw new InvalidOperationException($"{typeof(T)} already register.");
 
             Registration registration = new Registration(container => creator(container));
             _container[typeof(T)] = registration;
+            return registration;
         }
 
         public T Resolve<T>()
@@ -47,6 +49,19 @@ namespace Assets.CourceGame.Develop.DI
             throw new InvalidOperationException($"Registration for {typeof(T)} not exist"); 
         }
 
+        public void Initialize()
+        {
+            foreach( Registration registration in _container.Values)
+            {
+                if (registration.Instance == null && registration.IsNonLazy)
+                    registration.Instance = registration.Creator(this);
+
+                if(registration.Instance != null)
+                    if(registration.Instance is IInitializeable initializeable)
+                        initializeable.Initialize();
+            }
+        }
+
         private T CreateFrom<T>(Registration registration)
         {
             if (registration.Instance == null && registration.Creator != null)
@@ -55,14 +70,27 @@ namespace Assets.CourceGame.Develop.DI
             return (T)registration.Instance;
         }
 
+        public void Dispose()
+        {
+            foreach(Registration registration in _container.Values)
+            {
+                if (registration.Instance != null)
+                    if(registration.Instance is IDisposable disposable)
+                        disposable.Dispose();
+            }
+        }
+
         public class Registration
         {
             public Func<DIContainer, object> Creator { get; }
             public object Instance { get; set; }
+            public bool IsNonLazy {  get; private set; }
 
             public Registration(object instance) => Instance = instance;
 
             public Registration(Func<DIContainer, object> creator) => Creator = creator;
+
+            public void NonLazy() => IsNonLazy = true;
         }
     }
 }
