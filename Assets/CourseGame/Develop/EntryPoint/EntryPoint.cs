@@ -8,6 +8,8 @@ using Assets.CourseGame.Develop.CommonServices.DataManagement;
 using Assets.CourseGame.Develop.CommonServices.DataManagement.DataProviders;
 using System;
 using Assets.CourseGame.Develop.CommonServices.Wallet;
+using System.ComponentModel;
+using Assets.CourseGame.Develop.CommonServices.ConfigsManagement;
 
 namespace Assets.CourseGame.Develop.EntryPoint
 {
@@ -37,6 +39,8 @@ namespace Assets.CourseGame.Develop.EntryPoint
 
             RegisterWalletService(projectContainer);
 
+            RegisterConfigProviderService(projectContainer);
+
             // all registrations done
             projectContainer.Initialize();
 
@@ -48,12 +52,14 @@ namespace Assets.CourseGame.Develop.EntryPoint
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 144;
         }
+        private void RegisterConfigProviderService(DIContainer container)
+            => container.RegisterAsSingle(c => new ConfigsProviderService(c.Resolve<ResourcesAssetLoader>()));
 
         private void RegisterWalletService(DIContainer container)
             => container.RegisterAsSingle(c => new WalletService(c.Resolve<PlayerDataProvider>())).NonLazy();
 
         private void RegisterPlayerDataProvider(DIContainer container)
-            => container.RegisterAsSingle(c => new PlayerDataProvider(c.Resolve<ISaveLoadService>()));
+            => container.RegisterAsSingle(c => new PlayerDataProvider(c.Resolve<ISaveLoadService>(), c.Resolve<ConfigsProviderService>()));
 
         private void RegisterResourcesAssetLoader(DIContainer container)
              => container.RegisterAsSingle(c => new ResourcesAssetLoader());

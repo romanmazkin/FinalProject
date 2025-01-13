@@ -18,8 +18,11 @@ namespace Assets.CourseGame.Develop.Utils.Reactive
             set
             {
                 T oldValue = _value;
-                if(_value.Equals(oldValue)== false)
-                Changed?.Invoke(oldValue, value);
+
+                _value = value;
+
+                if (_value.Equals(oldValue) == false)
+                    Changed?.Invoke(oldValue, value);
             }
         }
     }

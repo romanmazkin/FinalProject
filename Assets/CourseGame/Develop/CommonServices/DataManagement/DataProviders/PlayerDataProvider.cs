@@ -1,4 +1,5 @@
-﻿using Assets.CourseGame.Develop.CommonServices.Wallet;
+﻿using Assets.CourseGame.Develop.CommonServices.ConfigsManagement;
+using Assets.CourseGame.Develop.CommonServices.Wallet;
 using System;
 using System.Collections.Generic;
 
@@ -6,9 +7,13 @@ namespace Assets.CourseGame.Develop.CommonServices.DataManagement.DataProviders
 {
     public class PlayerDataProvider : DataProvider<PlayerData>
     {
-        public PlayerDataProvider(ISaveLoadService saveLoadService) : base(saveLoadService)
-        {
+        private ConfigsProviderService _configsProviderService;
 
+        public PlayerDataProvider(
+            ISaveLoadService saveLoadService, 
+            ConfigsProviderService configsProviderService) : base(saveLoadService)
+        {
+            _configsProviderService = configsProviderService;
         }
 
         protected override PlayerData GetOriginData()
@@ -24,7 +29,7 @@ namespace Assets.CourseGame.Develop.CommonServices.DataManagement.DataProviders
             Dictionary<CurrencyTypes, int> walletData = new();
 
             foreach(CurrencyTypes currencyType in Enum.GetValues(typeof(CurrencyTypes)))
-                walletData.Add(currencyType, 0);
+                walletData.Add(currencyType, _configsProviderService.StartWalletConfig.GetStartValueFor(currencyType));
 
             return walletData;
         }

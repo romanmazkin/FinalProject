@@ -7,7 +7,9 @@ namespace Assets.CourceGame.Develop.DI
     public class DIContainer : IDisposable
     {
         private readonly Dictionary<Type, Registration> _container = new();
+
         private readonly DIContainer _parent;
+
         private readonly List<Type> _requests = new();
 
         public DIContainer() : this(null)
@@ -18,12 +20,23 @@ namespace Assets.CourceGame.Develop.DI
 
         public Registration RegisterAsSingle<T>(Func<DIContainer, T> creator)
         {
-            if (_container.ContainsKey(typeof(T)))
+            if (IsAlreadyRegister<T>())
                 throw new InvalidOperationException($"{typeof(T)} already register.");
 
             Registration registration = new Registration(container => creator(container));
             _container[typeof(T)] = registration;
             return registration;
+        }
+
+        public bool IsAlreadyRegister<T>()
+        {
+            if (_container.ContainsKey(typeof(T)))
+                return true;
+
+            if (_parent != null)
+                return _parent.IsAlreadyRegister<T>();
+
+            return false;
         }
 
         public T Resolve<T>()

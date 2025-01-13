@@ -19,8 +19,8 @@ namespace Assets.CourseGame.Develop.CommonServices.Wallet
 
         public List<CurrencyTypes> AvaliableCurrencies => _currencies.Keys.ToList();
 
-        public IReadOnlyVariable<int> GetCurrency(CurrencyTypes currencyType)
-            => _currencies[currencyType];
+        public IReadOnlyVariable<int> GetCurrency(CurrencyTypes type)
+            => _currencies[type];
 
         public bool HasEnought(CurrencyTypes type, int amount)
             => _currencies[type].Value >= amount;
