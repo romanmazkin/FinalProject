@@ -15,6 +15,9 @@ namespace Assets.CourseGame.Develop.CommonUI.Wallet
             _configProviderService = container.Resolve<ConfigsProviderService>();
         }
 
+        public WalletPresenter CreateWalletPresenter(IconWithTextListView view)
+            => new WalletPresenter(_walletService, view, this);
+
         public CurrencyPresenter CreateCurrencyPresenter(IconWithText view, CurrencyTypes currencyType)
             => new CurrencyPresenter(_walletService.GetCurrency(currencyType), currencyType, view, _configProviderService.CurrencyIconsConfig);
     }

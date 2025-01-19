@@ -10,6 +10,7 @@ using System;
 using Assets.CourseGame.Develop.CommonServices.Wallet;
 using System.ComponentModel;
 using Assets.CourseGame.Develop.CommonServices.ConfigsManagement;
+using Assets.CourseGame.Develop.CommonServices.LevelsManagement;
 
 namespace Assets.CourseGame.Develop.EntryPoint
 {
@@ -41,11 +42,16 @@ namespace Assets.CourseGame.Develop.EntryPoint
 
             RegisterConfigProviderService(projectContainer);
 
+            RegisterCompletedLevelsService(projectContainer);
+
             // all registrations done
             projectContainer.Initialize();
 
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
         }
+
+        private void RegisterCompletedLevelsService(DIContainer container)
+            => container.RegisterAsSingle(c => new CompleteLevelsService(c.Resolve<PlayerDataProvider>())).NonLazy();
 
         private void SetupAppSettings()
         {

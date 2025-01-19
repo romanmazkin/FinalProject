@@ -1,10 +1,6 @@
 ﻿using Assets.CourseGame.Develop.CommonServices.AssetsManagement;
 using Assets.CourseGame.Develop.Configs.Common.Wallet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Assets.CourseGame.Develop.Configs.Gameplay;
 
 namespace Assets.CourseGame.Develop.CommonServices.ConfigsManagement
 {
@@ -21,11 +17,14 @@ namespace Assets.CourseGame.Develop.CommonServices.ConfigsManagement
 
         public CurrencyIconsConfig CurrencyIconsConfig { get; private set; }
 
+        public LevelListConfig LevelsListConfig { get; private set; }
+
         public void LoadAll()
         {
             //Load configs
             LoadStartWalletConfig();
             LoadCurrencyIconsConfig();
+            LoadLevelsListConfig();
         }
 
         public void LoadStartWalletConfig()
@@ -33,5 +32,8 @@ namespace Assets.CourseGame.Develop.CommonServices.ConfigsManagement
 
         public void LoadCurrencyIconsConfig()
             => CurrencyIconsConfig = _resourcesAssetLoader.LoadResource<CurrencyIconsConfig>("Configs/Common/Wallet/CurrencyIconsConfig");
+
+        public void LoadLevelsListConfig()
+            => LevelsListConfig = _resourcesAssetLoader.LoadResource<LevelListConfig>("Configs/Gameplay/Levels/LevelListConfig");
     }
 }
