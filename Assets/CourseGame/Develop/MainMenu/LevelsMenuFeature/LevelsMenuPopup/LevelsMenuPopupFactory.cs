@@ -22,7 +22,7 @@ namespace Assets.CourseGame.Develop.MainMenu.LevelsMenuFeature.LevelsMenuPopup
 
         public LevelTilePresenter CreateLevelTilePresenter(LevelTileView view, int levelNumber)
         {
-            return new LevelTilePresenter(_container.Resolve<CompleteLevelsService>(), _container.Resolve<SceneSwitcher>(), levelNumber, view);
+            return new LevelTilePresenter(_container.Resolve<CompletedLevelsService>(), _container.Resolve<SceneSwitcher>(), levelNumber, view);
         }
 
         public LevelTileListPresenter CreateLevelTilesListPresenter(LevelTileListView view)

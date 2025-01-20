@@ -8,7 +8,7 @@ namespace Assets.CourseGame.Develop.MainMenu.LevelsMenuFeature.LevelsMenuPopup
     {
         private const int FirstLevel = 1;
 
-        private readonly CompleteLevelsService _levelService;
+        private readonly CompletedLevelsService _levelsService;
         private readonly SceneSwitcher _sceneSwitcher;
         private readonly int _levelNumber;
 
@@ -17,12 +17,12 @@ namespace Assets.CourseGame.Develop.MainMenu.LevelsMenuFeature.LevelsMenuPopup
         private bool _isBlocked;
 
         public LevelTilePresenter(
-            CompleteLevelsService levelService,
+            CompletedLevelsService levelsService,
             SceneSwitcher sceneSwitcher,
             int levelNumber,
             LevelTileView view)
         {
-            _levelService = levelService;
+            _levelsService = levelsService;
             _sceneSwitcher = sceneSwitcher;
             _levelNumber = levelNumber;
             _view = view;
@@ -42,7 +42,7 @@ namespace Assets.CourseGame.Develop.MainMenu.LevelsMenuFeature.LevelsMenuPopup
             }
             else
             {
-                if (_levelService.IsLevelCompleted(_levelNumber))
+                if (_levelsService.IsLevelCompleted(_levelNumber))
                     _view.SetComplete();
                 else
                     _view.SetActive();
@@ -60,19 +60,19 @@ namespace Assets.CourseGame.Develop.MainMenu.LevelsMenuFeature.LevelsMenuPopup
         {
             if (_isBlocked)
             {
-                Debug.Log("Level is blocked");
+                Debug.Log("Уровень заблокирован, пройдите предыдущий");
                 return;
             }
-            
-            if(_levelService.IsLevelCompleted(_levelNumber))
+
+            if (_levelsService.IsLevelCompleted(_levelNumber))
             {
-                Debug.Log("Level already completed");
+                Debug.Log("Уровень уже завершен");
                 return;
             }
 
             _sceneSwitcher.ProcessSwitchSceneFor(new OutputMainMenuArgs(new GameplayInputArgs(_levelNumber)));
         }
 
-        private bool PreviousLevelCompleted() => _levelService.IsLevelCompleted(_levelNumber - 1);
+        private bool PreviousLevelCompleted() => _levelsService.IsLevelCompleted(_levelNumber - 1);
     }
 }

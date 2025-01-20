@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Assets.CourseGame.Develop.CommonServices.LevelsManagement
 {
-    public class CompleteLevelsService : IDataReader<PlayerData>, IDataWriter<PlayerData>
+    public class CompletedLevelsService : IDataReader<PlayerData>, IDataWriter<PlayerData>
     {
         private List<int> _completedLevels = new();
 
-        public CompleteLevelsService(PlayerDataProvider playerDataProvider)
+        public CompletedLevelsService(PlayerDataProvider playerDataProvider)
         {
             playerDataProvider.RegisterWriter(this);
             playerDataProvider.RegisterReader(this);

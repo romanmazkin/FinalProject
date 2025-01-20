@@ -51,7 +51,7 @@ namespace Assets.CourseGame.Develop.EntryPoint
         }
 
         private void RegisterCompletedLevelsService(DIContainer container)
-            => container.RegisterAsSingle(c => new CompleteLevelsService(c.Resolve<PlayerDataProvider>())).NonLazy();
+            => container.RegisterAsSingle(c => new CompletedLevelsService(c.Resolve<PlayerDataProvider>())).NonLazy();
 
         private void SetupAppSettings()
         {
