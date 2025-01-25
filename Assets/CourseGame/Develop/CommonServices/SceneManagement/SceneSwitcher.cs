@@ -60,6 +60,10 @@ namespace Assets.CourseGame.Develop.CommonServices.SceneManagement
                     yield return ProcessSwitchToMainMenuScene(mainMenuInputArgs);
                     break;
 
+                case GameplayInputArgs gameplayInputArgs:
+                    yield return ProcessSwitchToGameplayScene(gameplayInputArgs);
+                    break;
+
                 default:
                     throw new ArgumentException(ErrorSceneTransicionMessage);
             }
