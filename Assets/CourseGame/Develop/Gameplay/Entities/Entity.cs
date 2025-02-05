@@ -2,23 +2,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.CourseGame.Develop.Gameplay.Entities
 {
     public class Entity : MonoBehaviour
     {
+        public event Action<Entity> Initialized;
+        public event Action<Entity> Disposed;
+
         private readonly Dictionary<EntityValues, object> _values = new();
 
         private readonly HashSet<IEntityBehaviour> _behaviours = new();
 
         private readonly List<IEntityUpdate> _updatables = new();
         private readonly List<IEntityInitialize> _initializables = new();
-        private readonly List<IEntityDispose> _disposables = new();
+        private readonly List<IEntityDispose> _disposeables = new();
 
         private bool _isInit;
+
+        private void Awake()
+        {
+            Install();
+        }
+
+        private void Install()
+        {
+            MonoEntityRegistrator[] registrators = GetComponents<MonoEntityRegistrator>();
+
+            if (registrators != null)
+                foreach (MonoEntityRegistrator registrator in registrators)
+                    registrator.Register(this);
+        }
 
         public void Initialize()
         {
@@ -26,12 +41,13 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 initializable.OnInit(this);
 
             _isInit = true;
+            Initialized?.Invoke(this);
         }
 
         private void Update()
         {
             if (_isInit == false)
-                throw new InvalidOperationException("not inited");
+                throw new InvalidOperationException("update for not inited");
 
             foreach (IEntityUpdate updatable in _updatables)
                 updatable.OnUpdate(Time.deltaTime);
@@ -39,8 +55,10 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
 
         private void OnDestroy()
         {
-            foreach (IEntityDispose disposable in _disposables)
+            foreach (IEntityDispose disposable in _disposeables)
                 disposable.OnDispose();
+
+            Disposed?.Invoke(this);
         }
 
         public Entity AddValue<TValue>(EntityValues valueType, TValue value)
@@ -94,9 +112,25 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
             }
 
             if (behaviour is IEntityDispose disposable)
-                _disposables.Add(disposable);
+                _disposeables.Add(disposable);
 
             return this;
         }
+
+        public bool TryRemoveBehaviour<T>() where T : IEntityBehaviour
+        {
+            IEntityBehaviour entityBehaviour = _behaviours.FirstOrDefault(beh => beh is T);
+
+            if (entityBehaviour == null)
+                return false;
+
+            _behaviours.Remove(entityBehaviour);
+
+            if (entityBehaviour is IEntityDispose disposable)
+                disposable.OnDispose();
+
+            return true;
+        }
     }
 }
+

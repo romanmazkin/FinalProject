@@ -6,11 +6,11 @@ using Assets.CourseGame.Develop.CommonServices.LoadingScreen;
 using Assets.CourseGame.Develop.CommonServices.SceneManagement;
 using Assets.CourseGame.Develop.CommonServices.DataManagement;
 using Assets.CourseGame.Develop.CommonServices.DataManagement.DataProviders;
-using System;
 using Assets.CourseGame.Develop.CommonServices.Wallet;
-using System.ComponentModel;
 using Assets.CourseGame.Develop.CommonServices.ConfigsManagement;
 using Assets.CourseGame.Develop.CommonServices.LevelsManagement;
+using System;
+using Assets.CourseGame.Develop.CommonServices.Timer;
 
 namespace Assets.CourseGame.Develop.EntryPoint
 {
@@ -44,11 +44,16 @@ namespace Assets.CourseGame.Develop.EntryPoint
 
             RegisterCompletedLevelsService(projectContainer);
 
+            RegisterTimerServiceFactory(projectContainer);
+
             // all registrations done
             projectContainer.Initialize();
 
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
         }
+
+        private void RegisterTimerServiceFactory(DIContainer container)
+            => container.RegisterAsSingle(c => new TimerServiceFactory(c));
 
         private void RegisterCompletedLevelsService(DIContainer container)
             => container.RegisterAsSingle(c => new CompletedLevelsService(c.Resolve<PlayerDataProvider>())).NonLazy();

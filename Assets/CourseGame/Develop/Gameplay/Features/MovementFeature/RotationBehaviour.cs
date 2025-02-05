@@ -1,5 +1,6 @@
 ﻿using Assets.CourseGame.Develop.Gameplay.Entities;
 using Assets.CourseGame.Develop.Gameplay.Entities.Behaviours;
+using Assets.CourseGame.Develop.Utils.Conditions;
 using Assets.CourseGame.Develop.Utils.Reactive;
 using UnityEngine;
 
@@ -12,15 +13,21 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.MovementFeature
         private IReadOnlyVariable<float> _rotationSpeed;
         private IReadOnlyVariable<Vector3> _direction;
 
+        private ICondition _condition;
+
         public void OnInit(Entity entity)
         {
-            _rotationSpeed = entity.GetValue<ReactiveVariable<float>>(EntityValues.RotationSpeed);
-            _direction = entity.GetValue<ReactiveVariable<Vector3>>(EntityValues.RotationDirection);
-            _transform = entity.GetValue<Transform>(EntityValues.Transform);
+            _rotationSpeed = entity.GetRotationSpeed();
+            _direction = entity.GetRotationDirection();
+            _transform = entity.GetTransform();
+            _condition = entity.GetRotationCondition();
         }
 
         public void OnUpdate(float deltaTime)
         {
+            if (_condition.Evaluate() == false)
+                return;
+
             if (_direction.Value == Vector3.zero)
                 return;
 
@@ -31,3 +38,4 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.MovementFeature
         }
     }
 }
+

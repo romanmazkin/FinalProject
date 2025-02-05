@@ -1,15 +1,19 @@
 ﻿using Assets.CourceGame.Develop.DI;
 using Assets.CourseGame.Develop.CommonServices.AssetsManagement;
+using Assets.CourseGame.Develop.Gameplay.Features.AttackFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.DamageFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.DeathFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.MovementFeature;
+using Assets.CourseGame.Develop.Utils.Conditions;
 using Assets.CourseGame.Develop.Utils.Reactive;
 using UnityEngine;
-
 
 namespace Assets.CourseGame.Develop.Gameplay.Entities
 {
     public class EntityFactory
     {
-        private string _ghostPrefabPath = "Gameplay/Creatures/Ghost";
+        private string GhostPrefabPath = "Gameplay/Creatures/Ghost";
+        private string MainHeroPrefabPath = "Gameplay/Creatures/MainHero";
 
         private DIContainer _container;
         private ResourcesAssetLoader _assets;
@@ -20,22 +24,172 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
             _assets = container.Resolve<ResourcesAssetLoader>();
         }
 
-        public Entity CreateGhost(Vector3 position)
+        public Entity CreateMainHero(Vector3 position)
         {
-            Entity prefab = _assets.LoadResource<Entity>(_ghostPrefabPath);
+            Entity prefab = _assets.LoadResource<Entity>(MainHeroPrefabPath);
 
             Entity instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
 
-            instance.AddValue(EntityValues.MoveDirection, new ReactiveVariable<Vector3>())
-                .AddValue(EntityValues.MoveSpeed, new ReactiveVariable<float>(10))
-                .AddValue(EntityValues.RotationDirection, new ReactiveVariable<Vector3>())
-                .AddValue(EntityValues.RotationSpeed, new ReactiveVariable<float>(900))
-                .AddValue(EntityValues.Transform, instance.GetComponent<Transform>())
-                .AddValue(EntityValues.CharacterController, instance.GetComponent<CharacterController>());
+            instance
+                .AddMoveDirection()
+                .AddMoveSpeed(new ReactiveVariable<float>(10))
+                .AddIsMoving()
+                .AddRotationDirection()
+                .AddRotationSpeed(new ReactiveVariable<float>(900))
+                .AddHealth(new ReactiveVariable<float>(800))
+                .AddMaxHealth(new ReactiveVariable<float>(800))
+                .AddDamage(new ReactiveVariable<float>(100))
+                .AddIntervalBetweenAttacks(new ReactiveVariable<float>(4f))
+                .AddAttackCooldown()
+                .AddTakeDamageRequest()
+                .AddTakeDamageEvent()
+                .AddAttackTrigger()
+                .AddIsAttackProcess()
+                .AddInstantAttackEvent()
+                .AddIsDead()
+                .AddIsDeathProcess();
+
+            ICompositeCondition attackCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false))
+                .Add(new FuncCondition(() => instance.GetIsMoving().Value == false))
+                .Add(new FuncCondition(() => instance.GetAttackCooldown().Value <= 0))
+                .Add(new FuncCondition(() => instance.GetIsAttackProcess().Value == false));
+
+            ICompositeCondition attackProcessCanceledCondition = new CompositeCondition(LogicOperations.OrOperation)
+                .Add(new FuncCondition(() => instance.GetIsMoving().Value))
+                .Add(new FuncCondition(() => instance.GetIsDead().Value));
+
+            ICompositeCondition deathCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetHealth().Value <= 0));
+
+            ICompositeCondition takeDamageCondition = new CompositeCondition(LogicOperations.AndOperation)
+               .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition moveCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition rotationCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition selfDestroyCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value))
+                .Add(new FuncCondition(() => instance.GetIsDeathProcess().Value == false));
+
+            instance
+                .AddMoveCondition(moveCondition)
+                .AddRotationCondition(rotationCondition)
+                .AddDeathCondition(deathCondition)
+                .AddTakeDamageCondition(takeDamageCondition)
+                .AddSelfDestroyCondition(selfDestroyCondition)
+                .AddAttackCanceledCondition(attackProcessCanceledCondition)
+                .AddAttackCondition(attackCondition);
 
             instance
                 .AddBehaviour(new CharacterControllerMovementBehaviour())
-                .AddBehaviour(new RotationBehaviour());
+                .AddBehaviour(new RotationBehaviour())
+                .AddBehaviour(new ApplyDamageFilterBehaviour())
+                .AddBehaviour(new ApplyDamageBehaviour())
+                .AddBehaviour(new AttackCooldownProcessBehaviour())
+                .AddBehaviour(new RestartAttackCooldownOnInstantAttackBehaviour())
+                .AddBehaviour(new EndAttackCooldownOnMovingBehaviour())
+                .AddBehaviour(new AttackBehaviour())
+                .AddBehaviour(new AttackCancelBehaviour())
+                .AddBehaviour(new InstantShootBehaviour(this))
+                .AddBehaviour(new DeathBehaviour())
+                .AddBehaviour(new SelfDestroyBehaviour());
+
+            instance.Initialize();
+
+            return instance;
+        }
+
+        public Entity CreateGhost(Vector3 position)
+        {
+            Entity prefab = _assets.LoadResource<Entity>(GhostPrefabPath);
+
+            Entity instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
+
+            instance
+                .AddMoveDirection()
+                .AddMoveSpeed(new ReactiveVariable<float>(10))
+                .AddIsMoving()
+                .AddRotationDirection()
+                .AddRotationSpeed(new ReactiveVariable<float>(900))
+                .AddHealth(new ReactiveVariable<float>(800))
+                .AddMaxHealth(new ReactiveVariable<float>(800))
+                .AddTakeDamageRequest()
+                .AddTakeDamageEvent()
+                .AddIsDead()
+                .AddIsDeathProcess()
+                .AddSelfTriggerDamage(new ReactiveVariable<float>(150));
+
+            ICompositeCondition deathCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetHealth().Value <= 0));
+
+            ICompositeCondition takeDamageCondition = new CompositeCondition(LogicOperations.AndOperation)
+               .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition moveCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition rotationCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value == false));
+
+            ICompositeCondition selfDestroyCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => instance.GetIsDead().Value))
+                .Add(new FuncCondition(() => instance.GetIsDeathProcess().Value == false));
+
+            instance
+                .AddMoveCondition(moveCondition)
+                .AddRotationCondition(rotationCondition)
+                .AddDeathCondition(deathCondition)
+                .AddTakeDamageCondition(takeDamageCondition)
+                .AddSelfDestroyCondition(selfDestroyCondition);
+
+            instance
+                .AddBehaviour(new CharacterControllerMovementBehaviour())
+                .AddBehaviour(new RotationBehaviour())
+                .AddBehaviour(new ApplyDamageFilterBehaviour())
+                .AddBehaviour(new ApplyDamageBehaviour())
+                .AddBehaviour(new DealDamageOnSelfTriggerBehaviour())
+                .AddBehaviour(new DeathBehaviour())
+                .AddBehaviour(new SelfDestroyBehaviour());
+
+            instance.Initialize();
+
+            return instance;
+        }
+
+
+        //снаряды
+
+        private string ArrowPrefabPath = "Gameplay/Projectiles/Arrow";
+
+        public Entity CreateArrow(Vector3 position, Vector3 direction, float damage)
+        {
+            Entity prefab = _assets.LoadResource<Entity>(ArrowPrefabPath);
+
+            Entity instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
+
+            instance
+                .AddMoveDirection(new ReactiveVariable<Vector3>(direction))
+                .AddRotationDirection(new ReactiveVariable<Vector3>(direction))
+                .AddMoveSpeed(new ReactiveVariable<float>(20))
+                .AddIsMoving();
+
+            ICompositeCondition moveCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => true));
+
+            ICompositeCondition rotationCondition = new CompositeCondition(LogicOperations.AndOperation)
+                .Add(new FuncCondition(() => true));
+
+            instance
+                .AddMoveCondition(moveCondition)
+                .AddRotationCondition(rotationCondition);
+
+            instance
+                .AddBehaviour(new RigidbodyMovementBehaviour())
+                .AddBehaviour(new ForceRotationBehaviour());
 
             instance.Initialize();
 
