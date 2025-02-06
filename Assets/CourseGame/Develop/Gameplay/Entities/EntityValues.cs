@@ -31,6 +31,8 @@
 
         Damage,
 
+        DetectedEntitiesBuffer,
+
         Health,
         MaxHealth,
 

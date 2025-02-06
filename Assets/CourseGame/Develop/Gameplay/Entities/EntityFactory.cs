@@ -3,6 +3,7 @@ using Assets.CourseGame.Develop.CommonServices.AssetsManagement;
 using Assets.CourseGame.Develop.Gameplay.Features.AttackFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.DamageFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.DeathFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.DetectedBufferFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.MovementFeature;
 using Assets.CourseGame.Develop.Utils.Conditions;
 using Assets.CourseGame.Develop.Utils.Reactive;
@@ -17,11 +18,13 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
 
         private DIContainer _container;
         private ResourcesAssetLoader _assets;
+        private EntitiesBuffer _entitiesBuffer;
 
         public EntityFactory(DIContainer container)
         {
             _container = container;
             _assets = container.Resolve<ResourcesAssetLoader>();
+            _entitiesBuffer = container.Resolve<EntitiesBuffer>();
         }
 
         public Entity CreateMainHero(Vector3 position, int team)
@@ -44,6 +47,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 .AddAttackTrigger()
+                .AddDetectedEntitiesBuffer()
                 .AddIsAttackProcess()
                 .AddInstantAttackEvent()
                 .AddIsDead()
@@ -86,6 +90,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 .AddAttackCondition(attackCondition);
 
             instance
+                .AddBehaviour(new UpdateEntityBufferFromCreaturesBuffer(_entitiesBuffer))
                 .AddBehaviour(new CharacterControllerMovementBehaviour())
                 .AddBehaviour(new RotationBehaviour())
                 .AddBehaviour(new ApplyDamageFilterBehaviour())
@@ -194,6 +199,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 .AddBehaviour(new ForceRotationBehaviour());
 
             instance.Initialize();
+
+            _entitiesBuffer.Add(instance);
 
             return instance;
         }

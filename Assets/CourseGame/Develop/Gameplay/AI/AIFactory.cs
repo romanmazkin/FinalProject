@@ -2,6 +2,7 @@
 using Assets.CourseGame.Develop.CommonServices.Timer;
 using Assets.CourseGame.Develop.Gameplay.AI.States;
 using Assets.CourseGame.Develop.Gameplay.Entities;
+using Assets.CourseGame.Develop.Gameplay.Features.InputFeature;
 using Assets.CourseGame.Develop.Utils.Conditions;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,21 @@ namespace Assets.CourseGame.Develop.Gameplay.AI
         {
             _container = container;
             _timerServiceFactory = _container.Resolve<TimerServiceFactory>();
+        }
+
+        public AIStateMachine CreateMainHeroBehaviour(Entity entity)
+        {
+            var moveDirection = entity.GetMoveDirection();
+            var rotationDirection = entity.GetRotationDirection();
+            IInputService inputService = _container.Resolve<IInputService>();
+
+            PlayerDirectionGenerateState playerDirectionGenerateState = new PlayerDirectionGenerateState(inputService, moveDirection, rotationDirection);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+
+            rootStateMachine.AddState(playerDirectionGenerateState);
+
+            return rootStateMachine;
         }
 
         public AIStateMachine CreateGhostBehaviour(Entity entity) 

@@ -43,6 +43,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities.CodeGeneration
 
             {EntityValues.Damage, typeof(ReactiveVariable<float>)},
 
+            {EntityValues.DetectedEntitiesBuffer, typeof(List<Entity>)},
+
             {EntityValues.Health, typeof(ReactiveVariable<float>) },
             {EntityValues.MaxHealth, typeof(ReactiveVariable<float>) },
 

@@ -32,7 +32,6 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.DamageFeature
 
             if (otherEntity != null)
             {
-                Debug.Log("НАШЕЛ ВРАГА, НАНОШУ УРОН");
                 otherEntity.TryTakeDamage(_damage.Value, _team.Value);
             }
         }

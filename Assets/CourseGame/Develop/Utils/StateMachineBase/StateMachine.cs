@@ -14,7 +14,11 @@ namespace Assets.CourseGame.Develop.Utils.StateMachineBase
         protected StateMachine(List<IDisposable> disposables = null)
         {
             if (disposables == null)
+            {
+                _disposables = new List<IDisposable>();
                 return;
+            }
+
             _disposables = new List<IDisposable>(disposables);
         }
 
