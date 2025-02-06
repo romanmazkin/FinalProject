@@ -26,5 +26,12 @@ namespace Assets.CourseGame.Develop.Gameplay.AI.States
             _movementDirection.Value = _inputService.Direction;
             _rotationDirection.Value = _movementDirection.Value;
         }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            _movementDirection.Value = Vector3.zero;
+        }
     }
 }

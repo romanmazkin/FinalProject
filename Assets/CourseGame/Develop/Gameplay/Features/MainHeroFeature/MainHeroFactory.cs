@@ -1,5 +1,6 @@
 ﻿using Assets.CourceGame.Develop.DI;
 using Assets.CourseGame.Develop.Gameplay.AI;
+using Assets.CourseGame.Develop.Gameplay.AI.Sensors;
 using Assets.CourseGame.Develop.Gameplay.Entities;
 using Assets.CourseGame.Develop.Gameplay.Features.TeamFeature;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature
         public Entity Create(Vector3 position)
         {
             Entity entity = _entityFactory.CreateMainHero(position, _team);
-            AIStateMachine brain = _aIFactory.CreateMainHeroBehaviour(entity);
+            AIStateMachine brain = _aIFactory.CreateMainHeroBehaviour(entity, new NearestDamageableTargetSelector(entity.GetTransform(), entity.GetTeam()));
 
             entity.AddBehaviour(new StateMachineBrainBehaviour(brain));
             _entitiesBuffer.Add(entity);
