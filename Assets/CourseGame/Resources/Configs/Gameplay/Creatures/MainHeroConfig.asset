@@ -9,6 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c198b7ea8dfc542a25cd420494c2e4, type: 3}
-  m_Name: LevelConfig 4
+  m_Script: {fileID: 11500000, guid: 716bc2ba172b7664aa6e0acdc1a4d536, type: 3}
+  m_Name: MainHeroConfig
   m_EditorClassIdentifier: 
+  <MoveSpeed>k__BackingField: 8
+  <RotationSpeed>k__BackingField: 900
+  <AttackInterval>k__BackingField: 1
+  <MaxHealth>k__BackingField: 500
+  <Damage>k__BackingField: 100

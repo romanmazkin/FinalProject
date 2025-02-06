@@ -1,4 +1,5 @@
 ﻿using Assets.CourceGame.Develop.DI;
+using Assets.CourseGame.Develop.Configs.Gameplay.Creatures;
 using Assets.CourseGame.Develop.Gameplay.AI;
 using Assets.CourseGame.Develop.Gameplay.AI.Sensors;
 using Assets.CourseGame.Develop.Gameplay.Entities;
@@ -23,9 +24,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature
             _aIFactory = container.Resolve<AIFactory>();
         }
 
-        public Entity Create(Vector3 position)
+        public Entity Create(Vector3 position, MainHeroConfig config)
         {
-            Entity entity = _entityFactory.CreateMainHero(position, _team);
+            Entity entity = _entityFactory.CreateMainHero(position, config, _team);
             AIStateMachine brain = _aIFactory.CreateMainHeroBehaviour(entity, new NearestDamageableTargetSelector(entity.GetTransform(), entity.GetTeam()));
 
             entity.AddBehaviour(new StateMachineBrainBehaviour(brain));

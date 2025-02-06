@@ -1,5 +1,6 @@
 ﻿using Assets.CourceGame.Develop.DI;
 using Assets.CourseGame.Develop.CommonServices.AssetsManagement;
+using Assets.CourseGame.Develop.Configs.Gameplay.Creatures;
 using Assets.CourseGame.Develop.Gameplay.Features.AttackFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.DamageFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.DeathFeature;
@@ -27,7 +28,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
             _entitiesBuffer = container.Resolve<EntitiesBuffer>();
         }
 
-        public Entity CreateMainHero(Vector3 position, int team)
+        public Entity CreateMainHero(Vector3 position, MainHeroConfig config, int team)
         {
             Entity prefab = _assets.LoadResource<Entity>(MainHeroPrefabPath);
 
@@ -35,14 +36,14 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
 
             instance
                 .AddMoveDirection()
-                .AddMoveSpeed(new ReactiveVariable<float>(10))
+                .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
                 .AddIsMoving()
                 .AddRotationDirection()
-                .AddRotationSpeed(new ReactiveVariable<float>(900))
-                .AddHealth(new ReactiveVariable<float>(800))
-                .AddMaxHealth(new ReactiveVariable<float>(800))
-                .AddDamage(new ReactiveVariable<float>(100))
-                .AddIntervalBetweenAttacks(new ReactiveVariable<float>(4f))
+                .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
+                .AddHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddDamage(new ReactiveVariable<float>(config.Damage))
+                .AddIntervalBetweenAttacks(new ReactiveVariable<float>(config.AttackInterval))
                 .AddAttackCooldown()
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
@@ -109,7 +110,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
             return instance;
         }
 
-        public Entity CreateGhost(Vector3 position, int team)
+        public Entity CreateGhost(Vector3 position, GhostConfig config, int team)
         {
             Entity prefab = _assets.LoadResource<Entity>(GhostPrefabPath);
 
@@ -117,17 +118,17 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
 
             instance
                 .AddMoveDirection()
-                .AddMoveSpeed(new ReactiveVariable<float>(10))
+                .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
                 .AddIsMoving()
                 .AddRotationDirection()
-                .AddRotationSpeed(new ReactiveVariable<float>(900))
-                .AddHealth(new ReactiveVariable<float>(800))
-                .AddMaxHealth(new ReactiveVariable<float>(800))
+                .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
+                .AddHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
                 .AddIsDead()
                 .AddIsDeathProcess()
-                .AddSelfTriggerDamage(new ReactiveVariable<float>(150))
+                .AddSelfTriggerDamage(new ReactiveVariable<float>(config.SelfTriggerDamage))
                 .AddTeam(new ReactiveVariable<int>(team));
 
             ICompositeCondition deathCondition = new CompositeCondition(LogicOperations.AndOperation)

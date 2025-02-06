@@ -1,7 +1,9 @@
 ﻿using Assets.CourceGame.Develop.DI;
+using Assets.CourseGame.Develop.Configs.Gameplay.Creatures;
 using Assets.CourseGame.Develop.Gameplay.AI;
 using Assets.CourseGame.Develop.Gameplay.Entities;
 using Assets.CourseGame.Develop.Gameplay.Features.TeamFeature;
+using System;
 using UnityEngine;
 
 namespace Assets.CourseGame.Develop.Gameplay.Features.EnemiesFeature
@@ -22,11 +24,22 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.EnemiesFeature
             _entitiesBuffer = container.Resolve<EntitiesBuffer>();
         }
 
-        public Entity CreateGhost(Vector3 position)
+        public Entity Create(Vector3 position, CreatureConfig config)
         {
-            Entity entity = _entityFactory.CreateGhost(position, _team);
+            Entity entity;
+            AIStateMachine brain;
 
-            AIStateMachine brain = _aIFactory.CreateGhostBehaviour(entity);
+            switch (config)
+            {
+                case GhostConfig ghostConfig:
+                    entity = _entityFactory.CreateGhost(position, ghostConfig, _team);
+                    brain = _aIFactory.CreateGhostBehaviour(entity);
+                    break;
+
+                default:
+                    throw new ArgumentException("Wrong enemy config.");
+            }
+
             entity.AddBehaviour(new StateMachineBrainBehaviour(brain));
 
             _entitiesBuffer.Add(entity);
