@@ -24,7 +24,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
             _assets = container.Resolve<ResourcesAssetLoader>();
         }
 
-        public Entity CreateMainHero(Vector3 position)
+        public Entity CreateMainHero(Vector3 position, int team)
         {
             Entity prefab = _assets.LoadResource<Entity>(MainHeroPrefabPath);
 
@@ -47,7 +47,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 .AddIsAttackProcess()
                 .AddInstantAttackEvent()
                 .AddIsDead()
-                .AddIsDeathProcess();
+                .AddIsDeathProcess()
+                .AddTeam(new ReactiveVariable<int>(team));
 
             ICompositeCondition attackCondition = new CompositeCondition(LogicOperations.AndOperation)
                 .Add(new FuncCondition(() => instance.GetIsDead().Value == false))
@@ -103,7 +104,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
             return instance;
         }
 
-        public Entity CreateGhost(Vector3 position)
+        public Entity CreateGhost(Vector3 position, int team)
         {
             Entity prefab = _assets.LoadResource<Entity>(GhostPrefabPath);
 
@@ -121,7 +122,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 .AddTakeDamageEvent()
                 .AddIsDead()
                 .AddIsDeathProcess()
-                .AddSelfTriggerDamage(new ReactiveVariable<float>(150));
+                .AddSelfTriggerDamage(new ReactiveVariable<float>(150))
+                .AddTeam(new ReactiveVariable<int>(team));
 
             ICompositeCondition deathCondition = new CompositeCondition(LogicOperations.AndOperation)
                 .Add(new FuncCondition(() => instance.GetHealth().Value <= 0));

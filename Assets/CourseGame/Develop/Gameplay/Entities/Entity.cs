@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets.CourseGame.Develop.Gameplay.Entities
 {
@@ -124,10 +125,19 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
             if (entityBehaviour == null)
                 return false;
 
+            if (entityBehaviour is IEntityUpdate updatable)
+                _updatables.Remove(updatable);
+
+            if (entityBehaviour is IEntityInitialize initializable)
+                _initializables.Remove(initializable);
+
             _behaviours.Remove(entityBehaviour);
 
             if (entityBehaviour is IEntityDispose disposable)
+            {
                 disposable.OnDispose();
+                _disposeables.Remove(disposable);
+            }
 
             return true;
         }

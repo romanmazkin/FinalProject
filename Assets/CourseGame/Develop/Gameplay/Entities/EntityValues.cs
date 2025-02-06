@@ -42,6 +42,8 @@
         IsDeathProcess,
         DeathCondition,
         SelfDestroyCondition,
+
+        Team,
     }
 }
 

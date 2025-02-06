@@ -12,6 +12,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.DamageFeature
     {
         private TriggerReciever _triggerReciever;
         private ReactiveVariable<float> _damage;
+        private ReactiveVariable<int> _team;
+
 
         private IDisposable _disposableTriggerEnter;
 
@@ -19,6 +21,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.DamageFeature
         {
             _triggerReciever = entity.GetSelfTriggerReciever();
             _damage = entity.GetSelfTriggerDamage();
+            _team = entity.GetTeam();
+
             _disposableTriggerEnter = _triggerReciever.Enter.Subscribe(OnTriggerEnter);
         }
 
@@ -29,7 +33,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.DamageFeature
             if (otherEntity != null)
             {
                 Debug.Log("НАШЕЛ ВРАГА, НАНОШУ УРОН");
-                otherEntity.TryTakeDamage(_damage.Value);
+                otherEntity.TryTakeDamage(_damage.Value, _team.Value);
             }
         }
 

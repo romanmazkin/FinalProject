@@ -1,6 +1,7 @@
 ﻿using Assets.CourceGame.Develop.DI;
 using Assets.CourseGame.Develop.Gameplay.AI;
 using Assets.CourseGame.Develop.Gameplay.Entities;
+using Assets.CourseGame.Develop.Gameplay.Features.TeamFeature;
 using UnityEngine;
 
 namespace Assets.CourseGame.Develop.Gameplay
@@ -17,8 +18,8 @@ namespace Assets.CourseGame.Develop.Gameplay
         {
             _container = container;
 
-            _ghost = _container.Resolve<EntityFactory>().CreateMainHero(Vector3.zero);
-            _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.forward * 4);
+            _ghost = _container.Resolve<EntityFactory>().CreateMainHero(Vector3.zero, TeamTypes.MainHero);
+            _container.Resolve<EntityFactory>().CreateGhost(Vector3.zero + Vector3.forward * 4, TeamTypes.Enemies);
 
             Debug.Log($"Скорость созданного призрака: {_ghost.GetMoveSpeed().Value}");
         }
