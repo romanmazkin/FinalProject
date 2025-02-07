@@ -57,6 +57,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.DeathCondition, typeof(ICompositeCondition) },
             {EntityValues.SelfDestroyCondition, typeof(ICompositeCondition) },
             {EntityValues.Team, typeof(ReactiveVariable<int>) },
+            {EntityValues.IsMainHero, typeof(ReactiveVariable<bool>) },
         };
 
         [InitializeOnLoadMethod]

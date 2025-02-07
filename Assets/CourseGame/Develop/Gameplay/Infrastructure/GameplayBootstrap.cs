@@ -7,6 +7,7 @@ using Assets.CourseGame.Develop.Gameplay.Features.EnemiesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.GameModeStagesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.InputFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature;
+using Assets.CourseGame.Develop.Gameplay.States;
 using System.Collections;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
     public class GameplayBootstrap : MonoBehaviour
     {
         private DIContainer _container;
+
+        private GameplayStateMachine _gameplayStateMachine;
 
         public IEnumerator Run(DIContainer container, GameplayInputArgs gameplayInputArgs)
         {
@@ -26,11 +29,10 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             Debug.Log("sdfsdfsdf");
             Debug.Log("sdfsdfsdf");
 
-            ConfigsProviderService configsProviderService = _container.Resolve<ConfigsProviderService>();
-            var gameMode = _container.Resolve<GameModesFactory>().CreateWaveGameMode();
-            gameMode.Start(configsProviderService.LevelsListConfig.GetBy(gameplayInputArgs.LevelNumber).WaveConfigs[0]);
-
             yield return new WaitForSeconds(1f);
+
+            _gameplayStateMachine = CreateGameplayStateMachine();
+            _gameplayStateMachine.Enter();
         }
 
         private void ProcessRegistrations()
@@ -42,14 +44,39 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             _container.RegisterAsSingle(c => new EntityFactory(c));
             _container.RegisterAsSingle(c => new AIFactory(c));
             _container.RegisterAsSingle(c => new EnemyFactory(c));
+
             _container.RegisterAsSingle(c => new MainHeroFactory(c));
+            _container.RegisterAsSingle(c => new MainHeroHolderService());
+
             _container.RegisterAsSingle(c => new GameModesFactory(c));
+
+            _container.RegisterAsSingle(c => new GameplayStateMachineDisposer());
+            _container.RegisterAsSingle(c => new GameplayStateFactory(c));
 
             _container.Initialize();
         }
 
+        private GameplayStateMachine CreateGameplayStateMachine()
+        {
+            GameplayStateMachineDisposer disposer = _container.Resolve<GameplayStateMachineDisposer>();
+
+            GameplayStateFactory gameplayStateFactory = _container.Resolve<GameplayStateFactory>();
+
+            InitMainCharacterState initMainCharacterState = gameplayStateFactory.CreateMainCharacterState();
+
+            GameplayStateMachine gameplayStateMachine = new GameplayStateMachine();
+
+            gameplayStateMachine.AddState(initMainCharacterState);
+
+            disposer.Set(gameplayStateMachine);
+
+            return gameplayStateMachine;
+        }
+
         private void Update()
         {
+            _gameplayStateMachine?.Update(Time.deltaTime);
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new OutputGameplayArgs(new MainMenuInputArgs()));

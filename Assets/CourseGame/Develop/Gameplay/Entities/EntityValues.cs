@@ -46,6 +46,8 @@
         SelfDestroyCondition,
 
         Team,
+
+        IsMainHero,
     }
 }
 

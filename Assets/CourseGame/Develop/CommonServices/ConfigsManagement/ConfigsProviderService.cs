@@ -1,6 +1,8 @@
 ﻿using Assets.CourseGame.Develop.CommonServices.AssetsManagement;
 using Assets.CourseGame.Develop.Configs.Common.Wallet;
 using Assets.CourseGame.Develop.Configs.Gameplay;
+using Assets.CourseGame.Develop.Configs.Gameplay.Creatures;
+using System;
 
 namespace Assets.CourseGame.Develop.CommonServices.ConfigsManagement
 {
@@ -19,12 +21,15 @@ namespace Assets.CourseGame.Develop.CommonServices.ConfigsManagement
 
         public LevelListConfig LevelsListConfig { get; private set; }
 
+        public MainHeroConfig MainHeroConfig { get; private set; }
+
         public void LoadAll()
         {
             //Load configs
             LoadStartWalletConfig();
             LoadCurrencyIconsConfig();
             LoadLevelsListConfig();
+            LoadMainHeroConfig();
         }
 
         public void LoadStartWalletConfig()
@@ -35,5 +40,8 @@ namespace Assets.CourseGame.Develop.CommonServices.ConfigsManagement
 
         public void LoadLevelsListConfig()
             => LevelsListConfig = _resourcesAssetLoader.LoadResource<LevelListConfig>("Configs/Gameplay/Levels/LevelListConfig");
+
+        private void LoadMainHeroConfig()
+            => MainHeroConfig = _resourcesAssetLoader.LoadResource<MainHeroConfig>("Configs/Gameplay/Creatures/MainHeroConfig");
     }
 }
