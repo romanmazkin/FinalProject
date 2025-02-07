@@ -205,5 +205,20 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
 
             return instance;
         }
+
+        private const string NextStageTriggerPrefabPath = "Gameplay/NextGameplayStageTrigger";
+
+        public Entity CreateNextGameplayStageTrigger(Vector3 position)
+        {
+            Entity prefab = _assets.LoadResource<Entity>(NextStageTriggerPrefabPath);
+
+            Entity instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
+
+            instance.Initialize();
+
+            _entitiesBuffer.Add(instance);
+
+            return instance;
+        }
     }
 }

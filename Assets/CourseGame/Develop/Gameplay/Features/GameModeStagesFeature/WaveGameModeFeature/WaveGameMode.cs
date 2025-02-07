@@ -22,8 +22,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.GameModeStagesFeature.Wave
             _enemyFactory = enemyFactory;
         }
 
-        private IReadOnlyVariable<bool> InProcess => _inProcess;
-        private IReadOnlyEvent Ended => _ended;
+        public IReadOnlyVariable<bool> InProcess => _inProcess;
+        public IReadOnlyEvent Ended => _ended;
 
         public void Start(WaveConfig waveConfig)
         {
