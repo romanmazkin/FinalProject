@@ -7,6 +7,8 @@ using Assets.CourseGame.Develop.Gameplay.Features.EnemiesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.GameModeStagesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.InputFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.PauseFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.TeamFeature;
 using Assets.CourseGame.Develop.Gameplay.States;
 using Assets.CourseGame.Develop.Utils.Conditions;
 using System;
@@ -41,6 +43,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
         private void ProcessRegistrations(GameplayInputArgs gameplayInputArgs)
         {
             _container.RegisterAsSingle<IInputService>(c => new DesktopInput());
+            _container.RegisterAsSingle<IPauseService>(c => new TimeScalePauseService());
 
             _container.RegisterAsSingle(c => new EntitiesBuffer());
 
@@ -50,6 +53,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
 
             _container.RegisterAsSingle(c => new MainHeroFactory(c));
             _container.RegisterAsSingle(c => new MainHeroHolderService());
+            _container.RegisterAsSingle(c => new MainHeroFinishConditionCreator(
+                c.Resolve<MainHeroHolderService>(), c.Resolve<GameplayFinishConditionService>()));
+
 
             _container.RegisterAsSingle(c => new GameModesFactory(c));
             _container.RegisterAsSingle(c => new StageProviderService(
@@ -57,6 +63,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
 
             _container.RegisterAsSingle(c => new GameplayStateMachineDisposer());
             _container.RegisterAsSingle(c => new GameplayStateFactory(c));
+            _container.RegisterAsSingle(c => new GameplayFinishConditionService());
 
 
 
@@ -66,12 +73,14 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
         private GameplayStateMachine CreateGameplayStateMachine(GameplayInputArgs gameplayInputArgs)
         {
             GameplayStateMachineDisposer disposer = _container.Resolve<GameplayStateMachineDisposer>();
+            GameplayFinishConditionService gameplayFinishConditionService = _container.Resolve<GameplayFinishConditionService>();
 
             GameplayStateFactory gameplayStateFactory = _container.Resolve<GameplayStateFactory>();
 
             InitMainCharacterState initMainCharacterState = gameplayStateFactory.CreateMainCharacterState();
-
             GameplayStateMachine gameLoopState = CreateGameLoopState(gameplayInputArgs);
+            DefeatState defeatState = gameplayStateFactory.CreateDefeatState();
+            WinState winState = gameplayStateFactory.CreateWinState(gameplayInputArgs);
 
             ActionCondition initMainCharacterToGameLoopStateCondition = new ActionCondition(initMainCharacterState.MainCharacterSetupComplete);
 
@@ -83,10 +92,20 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
 
             gameplayStateMachine.AddState(initMainCharacterState);
             gameplayStateMachine.AddState(gameLoopState);
+            gameplayStateMachine.AddState(defeatState);
+            gameplayStateMachine.AddState(winState);
 
             gameplayStateMachine.AddTransition(
                 initMainCharacterState, gameLoopState,
                 initMainCharacterToGameLoopStateCondition);
+
+            gameplayStateMachine.AddTransition(
+                gameLoopState, winState,
+                gameplayFinishConditionService.WinCondition);
+
+            gameplayStateMachine.AddTransition(
+                gameLoopState, defeatState,
+                gameplayFinishConditionService.DefeatCondition);
 
             disposer.Set(gameplayStateMachine);
 
@@ -96,6 +115,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
         private GameplayStateMachine CreateGameLoopState(GameplayInputArgs gameplayInputArgs)
         {
             GameplayStateFactory gameplayStateFactory = _container.Resolve<GameplayStateFactory>();
+            GameplayFinishConditionService gameplayFinishConditionService = _container.Resolve<GameplayFinishConditionService>();
+            StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
 
             NextStagePreparationState nextStagePreparationState = gameplayStateFactory.CreateNextStagePreparationState();
             StageProcessState stageProcessState = gameplayStateFactory.CreateStageProcessState(gameplayInputArgs);
@@ -103,6 +124,11 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             ActionCondition preparationToStageProcessStateCondition = new ActionCondition(nextStagePreparationState.OnNextStageTriggerComplete);
 
             ActionCondition stageProcessToPreparationStateCondition = new ActionCondition(stageProcessState.StageComplete);
+
+            gameplayFinishConditionService.WinCondition
+                .Add(new ActionCondition(nextStagePreparationState.OnNextStageTriggerComplete))
+                .Add(new FuncCondition(() => stageProviderService.StageResult == StageResult.Completed
+                && stageProviderService.HasNextStage() == false));
 
             List<IDisposable> disposables = new List<IDisposable>();
             disposables.Add(preparationToStageProcessStateCondition);
@@ -131,6 +157,18 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _container.Resolve<SceneSwitcher>().ProcessSwitchSceneFor(new OutputGameplayArgs(new MainMenuInputArgs()));
+            }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                foreach(Entity entity in _container.Resolve<EntitiesBuffer>().Elements)
+                {
+                    if(entity.TryGetTeam(out var team) && team.Value == TeamTypes.Enemies)
+                    {
+                        if (entity.TryGetTakeDamageRequest(out var takeDamageRequest))
+                            takeDamageRequest.Invoke(99999);
+                    }
+                }
             }
         }
     }

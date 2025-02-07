@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.CourseGame.Develop.Configs.Gameplay
@@ -19,7 +16,7 @@ namespace Assets.CourseGame.Develop.Configs.Gameplay
         {
             int levelIndex = level - 1;
 
-            if (level >= _levels.Count)
+            if (levelIndex >= _levels.Count)
                 throw new ArgumentException(nameof(level));
 
             return _levels[levelIndex];
