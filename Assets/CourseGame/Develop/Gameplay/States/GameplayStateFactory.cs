@@ -8,6 +8,9 @@ using Assets.CourseGame.Develop.Gameplay.Features.GameModeStagesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.InputFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.PauseFeature;
+using Assets.CourseGame.Develop.Utils.Conditions;
+using System;
+using System.Collections.Generic;
 
 namespace Assets.CourseGame.Develop.Gameplay.States
 {
@@ -55,6 +58,44 @@ namespace Assets.CourseGame.Develop.Gameplay.States
                 _container.Resolve<SceneSwitcher>(),
                 _container.Resolve<IPauseService>(),
                 _container.Resolve<IInputService>());
+        }
+
+        public GameplayStateMachine CreateGameLoopState(GameplayInputArgs gameplayInputArgs)
+        {
+            GameplayStateFactory gameplayStateFactory = _container.Resolve<GameplayStateFactory>();
+            GameplayFinishConditionService gameplayFinishConditionService = _container.Resolve<GameplayFinishConditionService>();
+            StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
+
+            NextStagePreparationState nextStagePreparationState = gameplayStateFactory.CreateNextStagePreparationState();
+            StageProcessState stageProcessState = gameplayStateFactory.CreateStageProcessState(gameplayInputArgs);
+
+            ActionCondition preparationToStageProcessStateCondition = new ActionCondition(nextStagePreparationState.OnNextStageTriggerComplete);
+
+            ActionCondition stageProcessToPreparationStateCondition = new ActionCondition(stageProcessState.StageComplete);
+
+            gameplayFinishConditionService.WinCondition
+                .Add(new ActionCondition(nextStagePreparationState.OnNextStageTriggerComplete))
+                .Add(new FuncCondition(() => stageProviderService.StageResult == StageResult.Completed
+                && stageProviderService.HasNextStage() == false));
+
+            List<IDisposable> disposables = new List<IDisposable>();
+            disposables.Add(preparationToStageProcessStateCondition);
+            disposables.Add(stageProcessToPreparationStateCondition);
+
+            GameplayStateMachine gameplayLoopState = new GameplayStateMachine(disposables);
+
+            gameplayLoopState.AddState(nextStagePreparationState);
+            gameplayLoopState.AddState(stageProcessState);
+
+            gameplayLoopState.AddTransition(
+                nextStagePreparationState, stageProcessState,
+                preparationToStageProcessStateCondition);
+
+            gameplayLoopState.AddTransition(
+                stageProcessState, nextStagePreparationState,
+                stageProcessToPreparationStateCondition);
+
+            return gameplayLoopState;
         }
     }
 }

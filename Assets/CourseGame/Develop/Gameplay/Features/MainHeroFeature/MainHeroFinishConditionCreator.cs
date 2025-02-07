@@ -28,14 +28,14 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature
 
         private void OnHeroRegistred(Entity hero)
         {
-            _gameplayFinishConditionService.DefeatCondition.Remove(_defeatCondition);
-            _defeatCondition = null;
+            _defeatCondition = new FuncCondition(() => hero.GetIsDead().Value);
+            _gameplayFinishConditionService.DefeatCondition.Add(_defeatCondition);
         }
 
         private void OnHeroUnregistred(Entity hero)
         {
-            _defeatCondition = new FuncCondition(() => hero.GetIsDead().Value);
-            _gameplayFinishConditionService.DefeatCondition.Add(_defeatCondition);
+            _gameplayFinishConditionService.DefeatCondition.Remove(_defeatCondition);
+            _defeatCondition = null;
         }
 
         public void Dispose()

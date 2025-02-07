@@ -54,7 +54,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             _container.RegisterAsSingle(c => new MainHeroFactory(c));
             _container.RegisterAsSingle(c => new MainHeroHolderService());
             _container.RegisterAsSingle(c => new MainHeroFinishConditionCreator(
-                c.Resolve<MainHeroHolderService>(), c.Resolve<GameplayFinishConditionService>()));
+                c.Resolve<MainHeroHolderService>(), c.Resolve<GameplayFinishConditionService>())).NonLazy();
 
 
             _container.RegisterAsSingle(c => new GameModesFactory(c));
@@ -78,7 +78,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             GameplayStateFactory gameplayStateFactory = _container.Resolve<GameplayStateFactory>();
 
             InitMainCharacterState initMainCharacterState = gameplayStateFactory.CreateMainCharacterState();
-            GameplayStateMachine gameLoopState = CreateGameLoopState(gameplayInputArgs);
+            GameplayStateMachine gameLoopState = gameplayStateFactory.CreateGameLoopState(gameplayInputArgs);
             DefeatState defeatState = gameplayStateFactory.CreateDefeatState();
             WinState winState = gameplayStateFactory.CreateWinState(gameplayInputArgs);
 
@@ -110,44 +110,6 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             disposer.Set(gameplayStateMachine);
 
             return gameplayStateMachine;
-        }
-
-        private GameplayStateMachine CreateGameLoopState(GameplayInputArgs gameplayInputArgs)
-        {
-            GameplayStateFactory gameplayStateFactory = _container.Resolve<GameplayStateFactory>();
-            GameplayFinishConditionService gameplayFinishConditionService = _container.Resolve<GameplayFinishConditionService>();
-            StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
-
-            NextStagePreparationState nextStagePreparationState = gameplayStateFactory.CreateNextStagePreparationState();
-            StageProcessState stageProcessState = gameplayStateFactory.CreateStageProcessState(gameplayInputArgs);
-
-            ActionCondition preparationToStageProcessStateCondition = new ActionCondition(nextStagePreparationState.OnNextStageTriggerComplete);
-
-            ActionCondition stageProcessToPreparationStateCondition = new ActionCondition(stageProcessState.StageComplete);
-
-            gameplayFinishConditionService.WinCondition
-                .Add(new ActionCondition(nextStagePreparationState.OnNextStageTriggerComplete))
-                .Add(new FuncCondition(() => stageProviderService.StageResult == StageResult.Completed
-                && stageProviderService.HasNextStage() == false));
-
-            List<IDisposable> disposables = new List<IDisposable>();
-            disposables.Add(preparationToStageProcessStateCondition);
-            disposables.Add(stageProcessToPreparationStateCondition);
-
-            GameplayStateMachine gameplayLoopState = new GameplayStateMachine(disposables);
-
-            gameplayLoopState.AddState(nextStagePreparationState);
-            gameplayLoopState.AddState(stageProcessState);
-
-            gameplayLoopState.AddTransition(
-                nextStagePreparationState, stageProcessState,
-                preparationToStageProcessStateCondition);
-
-            gameplayLoopState.AddTransition(
-                stageProcessState, nextStagePreparationState,
-                stageProcessToPreparationStateCondition);
-
-            return gameplayLoopState;
         }
 
         private void Update()

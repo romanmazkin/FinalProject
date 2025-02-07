@@ -30,6 +30,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.GameModeStagesFeature
                 throw new InvalidOperationException();
 
             _nextStageIndex.Value++;
+            StageResult = StageResult.Uncompleted;
         }
     }
 }
