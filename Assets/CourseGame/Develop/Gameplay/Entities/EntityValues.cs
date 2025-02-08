@@ -49,6 +49,8 @@
 
         IsMainHero,
 
+        AbilityList,
+
         BaseStats,
         ModifiedStats,
         StatsEffectsList,

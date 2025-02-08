@@ -46,11 +46,11 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
 
             Dictionary<StatTypes, float> modifiedStats = new Dictionary<StatTypes, float>(baseStats);
 
-            StatsEffectsList statsEffects = new StatsEffectsList();
-            statsEffects.Add(new StatsEffect(StatTypes.MoveSpeed, stat => stat += 10));
+            //StatsEffectsList statsEffects = new StatsEffectsList();
+            //statsEffects.Add(new StatsEffect(StatTypes.MoveSpeed, stat => stat *= 0.2f));
 
             instance
-                .AddStatsEffectsList(statsEffects)
+                .AddStatsEffectsList()
                 .AddBaseStats(baseStats)
                 .AddModifiedStats(modifiedStats)
                 .AddMoveDirection()

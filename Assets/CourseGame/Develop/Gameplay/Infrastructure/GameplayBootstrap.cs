@@ -3,6 +3,7 @@ using Assets.CourseGame.Develop.CommonServices.ConfigsManagement;
 using Assets.CourseGame.Develop.CommonServices.SceneManagement;
 using Assets.CourseGame.Develop.Gameplay.AI;
 using Assets.CourseGame.Develop.Gameplay.Entities;
+using Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.EnemiesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.GameModeStagesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.InputFeature;
@@ -50,6 +51,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             _container.RegisterAsSingle(c => new EntityFactory(c));
             _container.RegisterAsSingle(c => new AIFactory(c));
             _container.RegisterAsSingle(c => new EnemyFactory(c));
+
+            _container.RegisterAsSingle(c => new AbilityFactory(c));
 
             _container.RegisterAsSingle(c => new MainHeroFactory(c));
             _container.RegisterAsSingle(c => new MainHeroHolderService());
