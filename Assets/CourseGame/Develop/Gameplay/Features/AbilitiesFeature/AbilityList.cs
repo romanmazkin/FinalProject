@@ -2,7 +2,7 @@
 
 namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature
 {
-    public class AbilityList : ObservableList<IAbility>
+    public class AbilityList : ObservableList<Ability>
     {
     }
 }

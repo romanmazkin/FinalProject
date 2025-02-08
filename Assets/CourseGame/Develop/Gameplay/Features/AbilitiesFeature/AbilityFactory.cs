@@ -15,12 +15,15 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature
             _container = container;
         }
 
-        public IAbility CreateAbilityFor(Entity entity, AbilityConfig config)
+        public Ability CreateAbilityFor(Entity entity, AbilityConfig config, int currentLevel)
         {
             switch (config)
             {
                 case StatChangeAbilityConfig changeAbilityConfig:
-                    return new StatChangeAbility(entity, changeAbilityConfig);
+                    return new StatChangeAbility(entity, changeAbilityConfig, currentLevel);
+
+                case AdditionalDirectionsShotAbilityConfig additionalDirectionsShotAbilityConfig:
+                    return new AdditionalDirectionsShotAbility(additionalDirectionsShotAbilityConfig, entity, currentLevel);
 
                 default:
                     throw new ArgumentException();

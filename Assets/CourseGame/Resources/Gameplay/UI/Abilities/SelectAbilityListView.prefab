@@ -326,6 +326,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 646813752665060704}
+  - component: {fileID: 7073697238649128405}
   m_Layer: 5
   m_Name: SelectAbilityListView
   m_TagString: Untagged
@@ -354,3 +355,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7073697238649128405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7638101951547346548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d379b2ed851c2148ae12aa19319edc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 8874128305398600433}
+  _selectableAbilityViewPrefab: {fileID: 922284209232086075, guid: a122c0c1dc7523f47809de9b7404525c, type: 3}
+  _selectButton: {fileID: 1441783259668225131}

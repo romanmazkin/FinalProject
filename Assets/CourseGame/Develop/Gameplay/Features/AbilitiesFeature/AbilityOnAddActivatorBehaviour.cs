@@ -13,11 +13,11 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature
 
             _abilityList.Added += OnAbilityAdded;
 
-            foreach (IAbility ability in _abilityList.Elements)
+            foreach (Ability ability in _abilityList.Elements)
                 ability.Activate();
         }
 
-        private void OnAbilityAdded(IAbility ability)
+        private void OnAbilityAdded(Ability ability)
         {
             ability.Activate();
         }

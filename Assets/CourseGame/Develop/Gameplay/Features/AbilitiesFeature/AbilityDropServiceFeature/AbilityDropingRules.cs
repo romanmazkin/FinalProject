@@ -1,6 +1,8 @@
 ﻿using Assets.CourseGame.Develop.Configs.Gameplay.Abilities;
 using Assets.CourseGame.Develop.Configs.Gameplay.Abilities.DropOptions;
 using Assets.CourseGame.Develop.Gameplay.Entities;
+using Assets.CourseGame.Develop.Utils.Extensions;
+using System.Linq;
 
 namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature.AbilityDropServiceFeature
 {
@@ -8,6 +10,16 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature.AbilityDr
     {
         public bool IsAvailable(AbilityDropOption dropOption, Entity entity)
         {
+            if (dropOption.Config.IsUpgradable())
+            {
+                if (entity.GetAbilityList().Elements.Any(ability =>
+                ability.ID == dropOption.Config.ID
+                && ability.CurrentLevel.Value + dropOption.Level > ability.MaxLevel))
+                {
+                    return false;
+                }
+            }
+
             switch (dropOption.Config)
             {
                 case StatChangeAbilityConfig statChangeAbilityConfig:
@@ -15,7 +27,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature.AbilityDr
                         && modifiedStats.ContainsKey(statChangeAbilityConfig.StatType);
             }
 
-            return false;
+            return true;
         }
     }
 }

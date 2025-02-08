@@ -33,7 +33,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature.AbilityDr
                 availablesOptions.Remove(selectedOption);
             }
 
-            return availablesOptions;
+            return selectedOptions;
         }
     }
 }

@@ -5,6 +5,7 @@ using Assets.CourseGame.Develop.Gameplay.AI;
 using Assets.CourseGame.Develop.Gameplay.AI.Sensors;
 using Assets.CourseGame.Develop.Gameplay.Entities;
 using Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.LevelUPFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.TeamFeature;
 using Assets.CourseGame.Develop.Utils.Reactive;
 using UnityEngine;
@@ -38,15 +39,16 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature
             Entity entity = _entityFactory.CreateMainHero(position, config, _team);
             AIStateMachine brain = _aIFactory.CreateMainHeroBehaviour(entity, new NearestDamageableTargetSelector(entity.GetTransform(), entity.GetTeam()));
 
-            AbilityList abilityList = new AbilityList();
-            abilityList.Add(_abilityFactory.CreateAbilityFor(entity, _configsProviderService.AbilitiesConfigsContainer.AbilityConfigs[0]));
 
             entity
                 .AddIsMainHero(new ReactiveVariable<bool>(true))
-                .AddAbilityList(abilityList);
+                .AddLevel(new ReactiveVariable<int>(1))
+                .AddExperience()
+                .AddAbilityList();
 
             entity
                 .AddBehaviour(new StateMachineBrainBehaviour(brain))
+                .AddBehaviour(new LevelUpBehaviour(_configsProviderService.ExperienceForUpgradeLevelConfig))
                 .AddBehaviour(new AbilityOnAddActivatorBehaviour());
 
             _heroHolder.Register(entity);

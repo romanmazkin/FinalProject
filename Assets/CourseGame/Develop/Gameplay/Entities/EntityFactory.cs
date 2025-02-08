@@ -69,6 +69,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 .AddDetectedEntitiesBuffer()
                 .AddIsAttackProcess()
                 .AddInstantAttackEvent()
+                .AddInstanShootingDirections(new InstantShootingDirectionArgs(new InstantShotDirectionArgs(0, 1)))
                 .AddIsDead()
                 .AddIsDeathProcess()
                 .AddTeam(new ReactiveVariable<int>(team));
@@ -123,8 +124,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 .AddBehaviour(new RestartAttackCooldownOnInstantAttackBehaviour())
                 .AddBehaviour(new EndAttackCooldownOnMovingBehaviour())
                 .AddBehaviour(new AttackBehaviour())
+                .AddBehaviour(new DirectionsInstantShootingBehaviour(this))
                 .AddBehaviour(new AttackCancelBehaviour())
-                .AddBehaviour(new InstantShootBehaviour(this))
                 .AddBehaviour(new DeathBehaviour())
                 .AddBehaviour(new SelfDestroyBehaviour());
 

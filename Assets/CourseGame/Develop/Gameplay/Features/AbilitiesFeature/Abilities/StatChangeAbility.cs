@@ -4,12 +4,12 @@ using Assets.CourseGame.Develop.Gameplay.Features.StatsFeature;
 
 namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature.Abilities
 {
-    public class StatChangeAbility : IAbility
+    public class StatChangeAbility : Ability
     {
         private Entity _entity;
         private StatChangeAbilityConfig _config;
 
-        public StatChangeAbility(Entity entity, StatChangeAbilityConfig config)
+        public StatChangeAbility(Entity entity, StatChangeAbilityConfig config, int currentLevel) : base(config.ID, currentLevel, config.MaxLevel)
         {
             _entity = entity;
             _config = config;
@@ -17,7 +17,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature.Abilities
 
         public string ID => _config.ID;
 
-        public void Activate()
+        public override void Activate()
         {
             _entity.GetStatsEffectsList().Add(new StatsEffect(_config.StatType, _config.GetApplyEffect()));
         }

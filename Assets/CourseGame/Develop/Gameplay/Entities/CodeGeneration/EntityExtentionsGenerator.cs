@@ -1,5 +1,6 @@
 ﻿using Assets.CourseGame.Develop.Gameplay.AI.Sensors;
 using Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.AttackFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.StatsFeature;
 using Assets.CourseGame.Develop.Utils.Conditions;
 using Assets.CourseGame.Develop.Utils.Reactive;
@@ -39,6 +40,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.AttackCanceledCondition, typeof(ICompositeCondition)},
 
             {EntityValues.InstantAttackEvent, typeof(ReactiveEvent)},
+            {EntityValues.InstanShootingDirections, typeof(InstantShootingDirectionArgs)},
 
             {EntityValues.IntervalBetweenAttacks, typeof(ReactiveVariable<float>)},
             {EntityValues.AttackCooldown, typeof(ReactiveVariable<float>)},
@@ -67,6 +69,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.BaseStats, typeof(Dictionary<StatTypes, float>) },
             {EntityValues.ModifiedStats, typeof(Dictionary<StatTypes, float>) },
             {EntityValues.StatsEffectsList, typeof(StatsEffectsList) },
+
+            {EntityValues.Level, typeof(ReactiveVariable<int>) },
+            {EntityValues.Experience, typeof(ReactiveVariable<float>) },
         };
 
         [InitializeOnLoadMethod]

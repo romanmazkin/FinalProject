@@ -5,6 +5,7 @@ namespace Assets.CourseGame.Develop.Configs.Gameplay.Abilities
     public abstract class AbilityConfig : ScriptableObject
     {
         [field:SerializeField] public string ID { get; private set; }
+        public abstract int MaxLevel { get; }
 
         //meta-data 
         [field: SerializeField] public string Name { get; private set; }    
