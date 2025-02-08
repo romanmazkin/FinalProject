@@ -1,4 +1,5 @@
 ﻿using Assets.CourseGame.Develop.Gameplay.AI.Sensors;
+using Assets.CourseGame.Develop.Gameplay.Features.StatsFeature;
 using Assets.CourseGame.Develop.Utils.Conditions;
 using Assets.CourseGame.Develop.Utils.Reactive;
 using System;
@@ -58,6 +59,10 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.SelfDestroyCondition, typeof(ICompositeCondition) },
             {EntityValues.Team, typeof(ReactiveVariable<int>) },
             {EntityValues.IsMainHero, typeof(ReactiveVariable<bool>) },
+
+            {EntityValues.BaseStats, typeof(Dictionary<StatTypes, float>) },
+            {EntityValues.ModifiedStats, typeof(Dictionary<StatTypes, float>) },
+            {EntityValues.StatsEffectsList, typeof(StatsEffectsList) },
         };
 
         [InitializeOnLoadMethod]

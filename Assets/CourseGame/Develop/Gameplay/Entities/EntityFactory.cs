@@ -6,8 +6,10 @@ using Assets.CourseGame.Develop.Gameplay.Features.DamageFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.DeathFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.DetectedBufferFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.MovementFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.StatsFeature;
 using Assets.CourseGame.Develop.Utils.Conditions;
 using Assets.CourseGame.Develop.Utils.Reactive;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.CourseGame.Develop.Gameplay.Entities
@@ -34,16 +36,32 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
 
             Entity instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
 
+            Dictionary<StatTypes, float> baseStats = new Dictionary<StatTypes, float>()
+            {
+                {StatTypes.MoveSpeed, config.MoveSpeed},
+                {StatTypes.AttackInterval, config.AttackInterval},
+                {StatTypes.MaxHealth, config.MaxHealth},
+                {StatTypes.Damage, config.Damage},
+            };
+
+            Dictionary<StatTypes, float> modifiedStats = new Dictionary<StatTypes, float>(baseStats);
+
+            StatsEffectsList statsEffects = new StatsEffectsList();
+            statsEffects.Add(new StatsEffect(StatTypes.MoveSpeed, stat => stat += 10));
+
             instance
+                .AddStatsEffectsList(statsEffects)
+                .AddBaseStats(baseStats)
+                .AddModifiedStats(modifiedStats)
                 .AddMoveDirection()
-                .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
+                .AddMoveSpeed(new ReactiveVariable<float>(baseStats[StatTypes.MoveSpeed]))
                 .AddIsMoving()
                 .AddRotationDirection()
                 .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
-                .AddHealth(new ReactiveVariable<float>(config.MaxHealth))
-                .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
-                .AddDamage(new ReactiveVariable<float>(config.Damage))
-                .AddIntervalBetweenAttacks(new ReactiveVariable<float>(config.AttackInterval))
+                .AddHealth(new ReactiveVariable<float>(baseStats[StatTypes.MaxHealth]))
+                .AddMaxHealth(new ReactiveVariable<float>(baseStats[StatTypes.MaxHealth]))
+                .AddDamage(new ReactiveVariable<float>(baseStats[StatTypes.Damage]))
+                .AddIntervalBetweenAttacks(new ReactiveVariable<float>(baseStats[StatTypes.AttackInterval]))
                 .AddAttackCooldown()
                 .AddTakeDamageRequest()
                 .AddTakeDamageEvent()
@@ -91,6 +109,11 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
                 .AddAttackCondition(attackCondition);
 
             instance
+                .AddBehaviour(new StatEffectsApplierBehaviour())
+                .AddBehaviour(new MoveSpeedModifierApplierBehaviour())
+                .AddBehaviour(new DamageModifierApplierBehaviour())
+                .AddBehaviour(new MaxHealthModifierApplierBehaviour())
+                .AddBehaviour(new AttackIntervalModifierApplierBehaviour())
                 .AddBehaviour(new UpdateEntityBufferFromCreaturesBuffer(_entitiesBuffer))
                 .AddBehaviour(new CharacterControllerMovementBehaviour())
                 .AddBehaviour(new RotationBehaviour())

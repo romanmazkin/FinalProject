@@ -48,6 +48,10 @@
         Team,
 
         IsMainHero,
+
+        BaseStats,
+        ModifiedStats,
+        StatsEffectsList,
     }
 }
 
