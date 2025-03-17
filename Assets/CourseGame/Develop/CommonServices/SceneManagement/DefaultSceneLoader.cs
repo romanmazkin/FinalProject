@@ -13,5 +13,13 @@ namespace Assets.CourseGame.Develop.CommonServices.SceneManagement
             while (waitLoading.isDone == false)
                 yield return null;
         }
+
+        public IEnumerator UnloadAsync(SceneID sceneID)
+        {
+            AsyncOperation waitLoding = SceneManager.UnloadSceneAsync(sceneID.ToString());
+
+            while (waitLoding.isDone == false)
+                yield return null;
+        }
     }
 }

@@ -23,6 +23,8 @@ namespace Assets.CourseGame.Develop.Gameplay.AI.Sensors
                 .Where(target =>
                     target.TryGetTakeDamageRequest(out var request)
                     && target.TryGetIsDead(out var isDead)
+                    && target.TryGetIsSpawningProcess(out var spawningProcess)
+                    && spawningProcess.Value == false
                     && isDead.Value == false
                     && target.TryGetTeam(out ReactiveVariable<int> team)
                     && team.Value != _team.Value);

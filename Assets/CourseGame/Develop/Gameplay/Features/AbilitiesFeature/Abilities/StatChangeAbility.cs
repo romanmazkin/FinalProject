@@ -15,8 +15,6 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature.Abilities
             _config = config;
         }
 
-        public string ID => _config.ID;
-
         public override void Activate()
         {
             _entity.GetStatsEffectsList().Add(new StatsEffect(_config.StatType, _config.GetApplyEffect()));

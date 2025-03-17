@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f18a8c0b3830d488a07a0018764007, type: 3}
+  m_Name: GoldLootConfig
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: coins1
+  <Prefab>k__BackingField: {fileID: 6837282529838649565, guid: 0e9f3af7204790944a28b2d53ceeb79e, type: 3}
+  <Coins>k__BackingField: 5

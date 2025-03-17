@@ -35,3 +35,7 @@ MonoBehaviour:
     <Level>k__BackingField: 2
   - <Config>k__BackingField: {fileID: 11400000, guid: 59a411c8602334843a29027fef51602b, type: 2}
     <Level>k__BackingField: 2
+  - <Config>k__BackingField: {fileID: 11400000, guid: 48e2ce1c1100bf048b43c1b9a1ee8735, type: 2}
+    <Level>k__BackingField: 1
+  - <Config>k__BackingField: {fileID: 11400000, guid: 48e2ce1c1100bf048b43c1b9a1ee8735, type: 2}
+    <Level>k__BackingField: 2

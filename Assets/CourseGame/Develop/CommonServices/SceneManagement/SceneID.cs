@@ -6,6 +6,7 @@
         Bootstrap = 1,
         MainMenu = 2,
         Gameplay = 3,
-        Empty = 4
+        Empty = 4,
+        CharacterPreviewScene = 5
     }
 }

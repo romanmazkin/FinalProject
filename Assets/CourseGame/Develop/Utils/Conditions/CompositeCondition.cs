@@ -6,7 +6,7 @@ namespace Assets.CourseGame.Develop.Utils.Conditions
 {
     public class CompositeCondition : ICompositeCondition
     {
-        private List<(ICondition, Func<bool, bool, bool>)> _conditions = new();
+        private List<(ICondition, Func<bool, bool, bool>, int)> _conditions = new();
 
         private Func<bool, bool, bool> _standardLogicOperation;
 
@@ -17,7 +17,7 @@ namespace Assets.CourseGame.Develop.Utils.Conditions
 
         public CompositeCondition(ICondition condition, Func<bool, bool, bool> standardLogicOperation) : this(standardLogicOperation)
         {
-            _conditions.Add((condition, standardLogicOperation));
+            _conditions.Add((condition, standardLogicOperation, 0));
         }
 
         public bool Evaluate()
@@ -40,9 +40,10 @@ namespace Assets.CourseGame.Develop.Utils.Conditions
             return result;
         }
 
-        public ICompositeCondition Add(ICondition condition, Func<bool, bool, bool> logicOperation = null)
+        public ICompositeCondition Add(ICondition condition, int order = 0, Func<bool, bool, bool> logicOperation = null)
         {
-            _conditions.Add((condition, logicOperation));
+            _conditions.Add((condition, logicOperation, order));
+            _conditions = _conditions.OrderBy(cond => cond.Item3).ToList();
             return this;
         }
 

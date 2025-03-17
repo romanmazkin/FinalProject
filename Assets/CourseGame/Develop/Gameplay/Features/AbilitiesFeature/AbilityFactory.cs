@@ -25,6 +25,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature
                 case AdditionalDirectionsShotAbilityConfig additionalDirectionsShotAbilityConfig:
                     return new AdditionalDirectionsShotAbility(additionalDirectionsShotAbilityConfig, entity, currentLevel);
 
+                case BounceProjectileAbilityConfig bounceProjectileAbilityConfig:
+                    return new BounceProjectileAbility(bounceProjectileAbilityConfig, entity, _container.Resolve<EntitiesBuffer>(), currentLevel);
+
                 default:
                     throw new ArgumentException();
             }

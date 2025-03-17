@@ -22,12 +22,12 @@ namespace Assets.CourseGame.Develop.CommonServices.Wallet
         public IReadOnlyVariable<int> GetCurrency(CurrencyTypes type)
             => _currencies[type];
 
-        public bool HasEnought(CurrencyTypes type, int amount)
+        public bool HasEnough(CurrencyTypes type, int amount)
             => _currencies[type].Value >= amount;
 
         public void Spend(CurrencyTypes type, int amount)
         {
-            if (HasEnought(type, amount) == false)
+            if (HasEnough(type, amount) == false)
                 throw new ArgumentException(type.ToString());
 
             _currencies[type].Value -= amount;

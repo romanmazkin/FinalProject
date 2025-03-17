@@ -58,6 +58,35 @@
 
         Experience,
         Level,
+
+        IsProjectile,
+        Owner,
+
+        DeathLayer,
+        IsTouchDeathLayer,
+
+        IsTouchAnotherTeam,
+
+        BounceCount,
+        BounceEvent,
+        LayerToBounceReaction,
+
+        IsSpawningProcess,
+
+        Target,
+
+        IsPullable,
+        IsPullingProcess,
+        IsCollected,
+
+        Coins,
+
+        DropLootCondition,
+        LootIsDropped,
+
+        HealthBarPoint,
+
+        CollidersDisabledOnDeath
     }
 }
 

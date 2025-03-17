@@ -1,5 +1,6 @@
 ﻿using Assets.CourseGame.Develop.CommonServices.ConfigsManagement;
 using Assets.CourseGame.Develop.CommonServices.Wallet;
+using Assets.CourseGame.Develop.Gameplay.Features.StatsFeature;
 using System;
 using System.Collections.Generic;
 
@@ -21,8 +22,19 @@ namespace Assets.CourseGame.Develop.CommonServices.DataManagement.DataProviders
             return new PlayerData()
             {
                 WalletData = InitWalletData(),
-                CompletedLevels = new()
+                CompletedLevels = new(),
+                StatsUpgradeLevel = InintStatsUpgradesLevels()
             };
+        }
+
+        private Dictionary<StatTypes, int> InintStatsUpgradesLevels()
+        {
+            Dictionary<StatTypes, int> statUpgradesLevels = new();
+
+            foreach (StatTypes statType in Enum.GetValues(typeof(StatTypes)))
+                statUpgradesLevels.Add(statType, 1);
+
+            return statUpgradesLevels;
         }
 
         private Dictionary<CurrencyTypes, int> InitWalletData()

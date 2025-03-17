@@ -110,6 +110,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5163345864723499577, guid: b6e6f56ca6401d34fbe9e8453f59e4b2, type: 3}
+      propertyPath: m_Size.x
+      value: 0.16958773
+      objectReference: {fileID: 0}
+    - target: {fileID: 5163345864723499577, guid: b6e6f56ca6401d34fbe9e8453f59e4b2, type: 3}
+      propertyPath: m_Size.y
+      value: 0.10344805
+      objectReference: {fileID: 0}
+    - target: {fileID: 5163345864723499577, guid: b6e6f56ca6401d34fbe9e8453f59e4b2, type: 3}
+      propertyPath: m_Size.z
+      value: 0.46298945
+      objectReference: {fileID: 0}
+    - target: {fileID: 5163345864723499577, guid: b6e6f56ca6401d34fbe9e8453f59e4b2, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5163345864723499577, guid: b6e6f56ca6401d34fbe9e8453f59e4b2, type: 3}
+      propertyPath: m_Center.z
+      value: 0.43
+      objectReference: {fileID: 0}
     - target: {fileID: 6285280090058308419, guid: b6e6f56ca6401d34fbe9e8453f59e4b2, type: 3}
       propertyPath: m_Name
       value: Arrow

@@ -11,6 +11,8 @@ using Assets.CourseGame.Develop.CommonServices.ConfigsManagement;
 using Assets.CourseGame.Develop.CommonServices.LevelsManagement;
 using System;
 using Assets.CourseGame.Develop.CommonServices.Timer;
+using Assets.CourseGame.Develop.CommonUI.Wallet;
+using Assets.CourseGame.Develop.Gameplay.Features.StatsFeature;
 
 namespace Assets.CourseGame.Develop.EntryPoint
 {
@@ -46,11 +48,21 @@ namespace Assets.CourseGame.Develop.EntryPoint
 
             RegisterTimerServiceFactory(projectContainer);
 
+            RegisterStatUpgradeService(projectContainer);
+
+            RegisterWalletPresenterFactory(projectContainer);
+
             // all registrations done
             projectContainer.Initialize();
 
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
         }
+
+        private void RegisterWalletPresenterFactory(DIContainer container)
+            => container.RegisterAsSingle(c => new WalletPresenterFactory(c));
+
+        private void RegisterStatUpgradeService(DIContainer container)
+            => container.RegisterAsSingle(c => new StatsUpgradeService(c.Resolve<PlayerDataProvider>(), c.Resolve<ConfigsProviderService>())).NonLazy();
 
         private void RegisterTimerServiceFactory(DIContainer container)
             => container.RegisterAsSingle(c => new TimerServiceFactory(c));
@@ -109,7 +121,8 @@ namespace Assets.CourseGame.Develop.EntryPoint
 
         private void RegisterSceneSwitcher(DIContainer container)
             => container.RegisterAsSingle(c =>
-            new SceneSwitcher(c.Resolve<ICoroutinePerformer>(),
+            new SceneSwitcher(
+                c.Resolve<ICoroutinePerformer>(),
                 c.Resolve<ILoadingCurrtain>(),
                 c.Resolve<ISceneLoader>(),
                 c));

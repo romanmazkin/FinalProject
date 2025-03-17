@@ -3,6 +3,7 @@ using Assets.CourseGame.Develop.CommonServices.AssetsManagement;
 using Assets.CourseGame.Develop.CommonServices.ConfigsManagement;
 using Assets.CourseGame.Develop.CommonServices.CoroutinePerformer;
 using Assets.CourseGame.Develop.CommonServices.SceneManagement;
+using Assets.CourseGame.Develop.CommonUI.Wallet;
 using Assets.CourseGame.Develop.Gameplay.AI;
 using Assets.CourseGame.Develop.Gameplay.Entities;
 using Assets.CourseGame.Develop.Gameplay.Features.AbilitiesFeature;
@@ -12,11 +13,13 @@ using Assets.CourseGame.Develop.Gameplay.Features.EnemiesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.GameModeStagesFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.InputFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.LevelUPFeature;
+using Assets.CourseGame.Develop.Gameplay.Features.LootFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.PauseFeature;
 using Assets.CourseGame.Develop.Gameplay.Features.TeamFeature;
 using Assets.CourseGame.Develop.Gameplay.States;
 using Assets.CourseGame.Develop.Gameplay.UI;
+using Assets.CourseGame.Develop.Gameplay.UI.HealthBars;
 using Assets.CourseGame.Develop.Utils.Conditions;
 using System;
 using System.Collections;
@@ -30,6 +33,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
         private DIContainer _container;
 
         private GameplayStateMachine _gameplayStateMachine;
+        private CreaturesHealthDisplayPresenter _creatureHealthDisplayPresenter;
 
         public IEnumerator Run(DIContainer container, GameplayInputArgs gameplayInputArgs)
         {
@@ -37,9 +41,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
 
             ProcessRegistrations(gameplayInputArgs);
 
-            Debug.Log($"asdfklhsdf {gameplayInputArgs.LevelNumber}");
-            Debug.Log("sdfsdfsdf");
-            Debug.Log("sdfsdfsdf");
+            _creatureHealthDisplayPresenter = _container.Resolve<CreaturesHealthDisplayPresenter>();
+
+            Debug.Log($"Load level {gameplayInputArgs.LevelNumber}");
 
             yield return new WaitForSeconds(1f);
 
@@ -49,7 +53,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
 
         private void ProcessRegistrations(GameplayInputArgs gameplayInputArgs)
         {
-            _container.RegisterAsSingle<IInputService>(c => new DesktopInput());
+            _container.RegisterAsSingle<IInputService>(c => new DesktopInput(_container.Resolve<GameplayUIRoot>().Joystick));
             _container.RegisterAsSingle<IPauseService>(c => new TimeScalePauseService());
 
             _container.RegisterAsSingle(c => new EntitiesBuffer());
@@ -57,6 +61,30 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             _container.RegisterAsSingle(c => new EntityFactory(c));
             _container.RegisterAsSingle(c => new AIFactory(c));
             _container.RegisterAsSingle(c => new EnemyFactory(c));
+
+            _container.RegisterAsSingle(c => new HealthBarFactory(c));
+            _container.RegisterAsSingle(c => new CreaturesHealthPresentersFactory(c));
+
+            _container.RegisterAsSingle(c => new NextStagePreperationFrameFactory(c));
+
+            _container.RegisterAsSingle(c =>
+            c.Resolve<CreaturesHealthPresentersFactory>().CreateHealthDisplayPresenter()).NonLazy();
+
+            _container.RegisterAsSingle(c => new GameplayUIFactory(c));
+
+            _container.RegisterAsSingle(c => new MainHeroCoinsViewCreatorService(
+            c.Resolve<MainHeroHolderService>(), c.Resolve<WalletPresenterFactory>(),
+            c.Resolve<GameplayUIRoot>())).NonLazy();
+
+            _container.RegisterAsSingle(c => new MainHeroExperienceBarCreatorService(
+            c.Resolve<MainHeroHolderService>(), c.Resolve<GameplayUIFactory>())).NonLazy();
+
+            _container.RegisterAsSingle(c => _container.Resolve<GameplayUIFactory>().CreateStagePresenter()).NonLazy();
+
+            _container.RegisterAsSingle(c => new LootFactory(c));
+            _container.RegisterAsSingle(c => new DropLootService(
+                c.Resolve<ConfigsProviderService>(), c.Resolve<LootFactory>()));
+            _container.RegisterAsSingle(c => new LootPullingService(c.Resolve<EntitiesBuffer>())).NonLazy();
 
             _container.RegisterAsSingle(c => new AbilityFactory(c));
             _container.RegisterAsSingle(c => new AbilityPresentersFactory(c));
@@ -78,7 +106,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
                 c.Resolve<ConfigsProviderService>().LevelsListConfig.GetBy(gameplayInputArgs.LevelNumber)));
 
             _container.RegisterAsSingle(c => new GameplayStateMachineDisposer());
-            _container.RegisterAsSingle(c => new GameplayStateFactory(c));
+            _container.RegisterAsSingle(c => new GameplayStatesFactory(c));
             _container.RegisterAsSingle(c => new GameplayFinishConditionService());
 
             _container.RegisterAsSingle(c =>
@@ -95,9 +123,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             GameplayStateMachineDisposer disposer = _container.Resolve<GameplayStateMachineDisposer>();
             GameplayFinishConditionService gameplayFinishConditionService = _container.Resolve<GameplayFinishConditionService>();
 
-            GameplayStateFactory gameplayStateFactory = _container.Resolve<GameplayStateFactory>();
+            GameplayStatesFactory gameplayStateFactory = _container.Resolve<GameplayStatesFactory>();
 
-            InitMainCharacterState initMainCharacterState = gameplayStateFactory.CreateMainCharacterState();
+            InitMainCharacterState initMainCharacterState = gameplayStateFactory.CreateInitMainCharacterState();
             GameplayStateMachine gameLoopState = gameplayStateFactory.CreateGameLoopState(gameplayInputArgs);
             DefeatState defeatState = gameplayStateFactory.CreateDefeatState();
             WinState winState = gameplayStateFactory.CreateWinState(gameplayInputArgs);
@@ -145,9 +173,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
 
             if (Input.GetKeyDown(KeyCode.K))
             {
-                foreach(Entity entity in _container.Resolve<EntitiesBuffer>().Elements)
+                foreach (Entity entity in _container.Resolve<EntitiesBuffer>().Elements)
                 {
-                    if(entity.TryGetTeam(out var team) && team.Value == TeamTypes.Enemies)
+                    if (entity.TryGetTeam(out var team) && team.Value == TeamTypes.Enemies)
                     {
                         if (entity.TryGetTakeDamageRequest(out var takeDamageRequest))
                             takeDamageRequest.Invoke(99999);
@@ -172,6 +200,11 @@ namespace Assets.CourseGame.Develop.Gameplay.Infrastructure
             {
                 _container.Resolve<MainHeroHolderService>().MainHero.GetInstantAttackEvent().Invoke();
             }
+        }
+
+        private void LateUpdate()
+        {
+            _creatureHealthDisplayPresenter.LateUpdate();
         }
     }
 }

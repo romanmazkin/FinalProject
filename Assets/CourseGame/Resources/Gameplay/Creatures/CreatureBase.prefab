@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3091561523984257882}
   - component: {fileID: 8107323310555553644}
   - component: {fileID: 4727706734628197426}
+  - component: {fileID: 3165130314103953783}
   m_Layer: 6
   m_Name: CreatureBase
   m_TagString: Untagged
@@ -73,6 +74,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rootView: {fileID: 2178832484766121403}
+--- !u!114 &3165130314103953783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398887235025149738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28afd348014bca846b6f58a3032e7c72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colliders: []
 --- !u!1 &2178832484766121403
 GameObject:
   m_ObjectHideFlags: 0

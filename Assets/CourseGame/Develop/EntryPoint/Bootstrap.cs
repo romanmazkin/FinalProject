@@ -34,7 +34,7 @@ namespace Assets.CourseGame.Develop.EntryPoint
 
             loadingCurrtain.Hide();
 
-            sceneSwitcher.ProcessSwitchSceneFor(new OutputBootstrapArgs(new GameplayInputArgs(1)));
+            sceneSwitcher.ProcessSwitchSceneFor(new OutputBootstrapArgs(new MainMenuInputArgs()));
         }
     }
 }

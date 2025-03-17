@@ -3,7 +3,6 @@ using Assets.CourseGame.Develop.Gameplay.Entities;
 using Assets.CourseGame.Develop.Gameplay.Features.MainHeroFeature;
 using Assets.CourseGame.Develop.Utils.Reactive;
 using Assets.CourseGame.Develop.Utils.StateMachineBase;
-using System;
 using UnityEngine;
 
 namespace Assets.CourseGame.Develop.Gameplay.States

@@ -26,9 +26,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.LevelUPFeature
         private IDisposable _heroUnregistredDisposable;
 
         public DropAbilityOnMainHeroLevelUpService(
-            MainHeroHolderService mainHeroHolderService, 
-            AbilityPresentersFactory abilityPresentersFactory, 
-            IPauseService pauseService, 
+            MainHeroHolderService mainHeroHolderService,
+            AbilityPresentersFactory abilityPresentersFactory,
+            IPauseService pauseService,
             ICoroutinePerformer coroutinePerformer)
         {
             _mainHeroHolderService = mainHeroHolderService;
@@ -58,7 +58,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.LevelUPFeature
 
         private IEnumerator SelectAbilityProcess()
         {
-            while(_levelUpRequests.Count > 0)
+            while (_levelUpRequests.Count > 0)
             {
                 int level = _levelUpRequests.Dequeue();
 
@@ -70,6 +70,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.LevelUPFeature
 
                 yield return new WaitUntil(() => PopupIsOpened == false);
             }
+
+            _selectAbilityProcess = null;
         }
 
         private void OnAbilitySelected(AbilitySelectPopupPresenter popup)
@@ -86,7 +88,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.LevelUPFeature
         public void Dispose()
         {
             _heroRegistredDisposable.Dispose();
-            _heroUnregistredDisposable.Dispose();   
+            _heroUnregistredDisposable.Dispose();
         }
     }
 }

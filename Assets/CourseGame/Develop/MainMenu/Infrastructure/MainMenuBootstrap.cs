@@ -5,6 +5,7 @@ using Assets.CourseGame.Develop.CommonServices.SceneManagement;
 using Assets.CourseGame.Develop.CommonServices.Wallet;
 using Assets.CourseGame.Develop.CommonUI.Wallet;
 using Assets.CourseGame.Develop.MainMenu.LevelsMenuFeature.LevelsMenuPopup;
+using Assets.CourseGame.Develop.MainMenu.StatsUpgradeFeature;
 using System.Collections;
 using UnityEngine;
 
@@ -31,14 +32,19 @@ public class MainMenuBootstrap : MonoBehaviour
             LevelsMenuPopupPresenter levelsMenuPopupPresenter = _container.Resolve<LevelsMenuPopupFactory>().CreateLevelsMenuPopupPresenter();
             levelsMenuPopupPresenter.Enable();
         });
+
+        mainMenuUIRoot.OpenStatsUpgradePopupButton.Initialize(() =>
+        {
+            StatsUpgradePopupPresenter statsUpgradePopupPresenter = _container.Resolve<StatsUpgradePopupFactory>().CreatePopup();
+            statsUpgradePopupPresenter.Enable();
+        });
     }
 
     private void ProcessRegistrations()
     {
         //registrations foe this scene
         _container.RegisterAsSingle(c => new LevelsMenuPopupFactory(c));
-
-        _container.RegisterAsSingle(c => new WalletPresenterFactory(c));
+        _container.RegisterAsSingle(c => new StatsUpgradePopupFactory(c));
 
         _container.RegisterAsSingle(c =>
         {
@@ -46,8 +52,9 @@ public class MainMenuBootstrap : MonoBehaviour
             return Instantiate(mainMenuUIRootPrefab);
         }).NonLazy();
 
-        _container.RegisterAsSingle(c => c.Resolve<WalletPresenterFactory>()
-        .CreateWalletPresenter(c.Resolve<MainMenuUIRoot>().WalletView))
+        _container
+            .RegisterAsSingle(c => c.Resolve<WalletPresenterFactory>()
+            .CreateWalletPresenter(c.Resolve<MainMenuUIRoot>().WalletView))
             .NonLazy();
 
         _container.Initialize();

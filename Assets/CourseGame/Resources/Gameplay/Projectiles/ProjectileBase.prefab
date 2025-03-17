@@ -9,10 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2779692060109290757}
-  - component: {fileID: 1877648929888798561}
-  - component: {fileID: 6619722335063790991}
   - component: {fileID: 8839748404680247661}
-  - component: {fileID: 8299706140409829558}
+  - component: {fileID: 5163345864723499577}
+  - component: {fileID: 7346984232977584034}
+  - component: {fileID: 5880165516079850685}
+  - component: {fileID: 3462888337279832757}
+  - component: {fileID: 6321070278631932541}
+  - component: {fileID: 3876498165079541954}
   m_Layer: 0
   m_Name: ProjectileBase
   m_TagString: Untagged
@@ -36,31 +39,6 @@ Transform:
   - {fileID: 7896042656223939979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1877648929888798561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6285280090058308419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4166702a80b41a4aaace15f585f3976, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6619722335063790991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6285280090058308419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38d0130c7eaa62645811cbedaf00dd9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _transform: {fileID: 2779692060109290757}
 --- !u!54 &8839748404680247661
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -88,7 +66,79 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8299706140409829558
+--- !u!65 &5163345864723499577
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285280090058308419}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7346984232977584034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285280090058308419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7786784d9dfd99149a43160d65788237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _triggerReciever: {fileID: 5880165516079850685}
+--- !u!114 &5880165516079850685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285280090058308419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64c0fd3c38f70b4cb474da2220df00f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ignoreColliders: []
+--- !u!114 &3462888337279832757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285280090058308419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4166702a80b41a4aaace15f585f3976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6321070278631932541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285280090058308419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38d0130c7eaa62645811cbedaf00dd9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transform: {fileID: 2779692060109290757}
+--- !u!114 &3876498165079541954
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

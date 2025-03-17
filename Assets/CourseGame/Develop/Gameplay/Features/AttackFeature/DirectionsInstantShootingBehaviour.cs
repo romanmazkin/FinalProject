@@ -12,6 +12,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AttackFeature
         private InstantShootingDirectionArgs _directions;
         private ReactiveVariable<float> _damage;
         private Transform _shootPoint;
+        private Entity _entity;
 
         private IDisposable _disposableAttackEvent;
 
@@ -24,6 +25,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AttackFeature
 
         public void OnInit(Entity entity)
         {
+            _entity = entity;
             _attackEvent = entity.GetInstantAttackEvent();
             _damage = entity.GetDamage();   
             _shootPoint = entity.GetShootPoint();
@@ -50,7 +52,7 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.AttackFeature
                 Vector2 offset = perpindicular * (-offesetBetweenProjectiles / 2f * (projectileCounts - 1) + i * offesetBetweenProjectiles);
                 Vector3 position = new Vector3(_shootPoint.position.x + offset.x, _shootPoint.position.y, _shootPoint.position.z + offset.y);
 
-                _entityFactory.CreateArrow(position, directionForShoot, _damage.Value);
+                _entityFactory.CreateArrow(position, directionForShoot, _damage.Value, _entity);
             }
         }
 
