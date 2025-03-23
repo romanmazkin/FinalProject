@@ -19,7 +19,6 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
 {
     public class EntityFactory
     {
-        private string GhostPrefabPath = "Gameplay/Creatures/Ghost";
         private string MainHeroPrefabPath = "Gameplay/Creatures/MainHero";
 
         private DIContainer _container;
@@ -127,9 +126,9 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities
             return instance;
         }
 
-        public Entity CreateGhost(Vector3 position, GhostConfig config, int team)
+        public Entity CreateGhost(Vector3 position, GhostConfig config, int team, string ghostPrefabPath)
         {
-            Entity prefab = _assets.LoadResource<Entity>(GhostPrefabPath);
+            Entity prefab = _assets.LoadResource<Entity>(ghostPrefabPath);
 
             Entity instance = Object.Instantiate(prefab, position, Quaternion.identity, null);
 

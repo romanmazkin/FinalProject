@@ -42,7 +42,6 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.LootFeature
             return pullableBase;
         }
 
-
         public Entity CreateHealthLoot(Entity prefab, Vector3 position, float health)
         {
             Entity pullableBase = _entityFactory.CreatePullable(prefab, position);

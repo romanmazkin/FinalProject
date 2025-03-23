@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b96c9820151d6a6499759a745cda4fe5, type: 3}
-  m_Name: GhostConfig
+  m_Script: {fileID: 11500000, guid: b0b2f8de486b9a14289baf5e6235ad90, type: 3}
+  m_Name: BossGhostConfig
   m_EditorClassIdentifier: 
-  <MoveSpeed>k__BackingField: 8
+  <MoveSpeed>k__BackingField: 16
   <RotationSpeed>k__BackingField: 900
-  <MaxHealth>k__BackingField: 400
-  <SelfTriggerDamage>k__BackingField: 100
+  <MaxHealth>k__BackingField: 10000
+  <SelfTriggerDamage>k__BackingField: 1000

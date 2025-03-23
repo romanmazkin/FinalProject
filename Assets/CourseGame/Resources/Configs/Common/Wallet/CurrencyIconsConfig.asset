@@ -15,5 +15,3 @@ MonoBehaviour:
   _configs:
   - <CurrencyType>k__BackingField: 0
     <Sprite>k__BackingField: {fileID: 21300000, guid: b2c9069c90d6e4525b38373fea3f1fbe, type: 3}
-  - <CurrencyType>k__BackingField: 1
-    <Sprite>k__BackingField: {fileID: 21300000, guid: 0c73e834a5f4e4fcbb0d6d0fbec119a4, type: 3}

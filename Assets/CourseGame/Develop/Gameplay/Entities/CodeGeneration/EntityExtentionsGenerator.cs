@@ -102,8 +102,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities.CodeGeneration
             {EntityValues.CollidersDisabledOnDeath, typeof(IEnumerable<Collider>) },
         };
 
-        [InitializeOnLoadMethod]
-        [MenuItem("Tools/GenerateEntityExtensions")]
+        //[InitializeOnLoadMethod]
+        //[MenuItem("Tools/GenerateEntityExtensions")]
         private static void Generate()
         {
             string path = GetPathToExtensionsFile();
@@ -146,8 +146,8 @@ namespace Assets.CourseGame.Develop.Gameplay.Entities.CodeGeneration
 
             writer.Close();
 
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            //AssetDatabase.SaveAssets();
+            //AssetDatabase.Refresh();
         }
 
         private static string GetClassHeader() => "public static class EntityExtensionGenerated";

@@ -14,22 +14,65 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _waveConfigs:
   - _waveItems:
-    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 3}
-      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: e8c5f745fff0f7848b88745736a41157, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 6}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 296a63b51692e3e41a6f381ece9cad5a, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: -6}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: -8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 296a63b51692e3e41a6f381ece9cad5a, type: 2}
   - _waveItems:
-    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 3}
-      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: e8c5f745fff0f7848b88745736a41157, type: 2}
-    - <SpawnPosition>k__BackingField: {x: -3, y: 0, z: 3}
-      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: e8c5f745fff0f7848b88745736a41157, type: 2}
-    - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: 3}
-      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: e8c5f745fff0f7848b88745736a41157, type: 2}
+    - <SpawnPosition>k__BackingField: {x: -3, y: 0, z: 6}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 296a63b51692e3e41a6f381ece9cad5a, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: 6}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 296a63b51692e3e41a6f381ece9cad5a, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: -8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: -8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: -3, y: 0, z: -8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
   - _waveItems:
-    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 3}
-      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: e8c5f745fff0f7848b88745736a41157, type: 2}
-    - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: 3}
-      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: e8c5f745fff0f7848b88745736a41157, type: 2}
     - <SpawnPosition>k__BackingField: {x: -3, y: 0, z: 3}
-      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: e8c5f745fff0f7848b88745736a41157, type: 2}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: 3}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: -7}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 5}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: -5}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 2, y: 0, z: -10}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: -2, y: 0, z: -10}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3133e0744f18205489e701a39bf99fa0, type: 2}
+    - <SpawnPosition>k__BackingField: {x: -3, y: 0, z: -7}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3014b6c4e9aa8ee46a08896992846576, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: -7}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3014b6c4e9aa8ee46a08896992846576, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 7}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3014b6c4e9aa8ee46a08896992846576, type: 2}
+  - _waveItems:
+    - <SpawnPosition>k__BackingField: {x: -3, y: 0, z: 7}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3014b6c4e9aa8ee46a08896992846576, type: 2}
+    - <SpawnPosition>k__BackingField: {x: -3, y: 0, z: 0}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3014b6c4e9aa8ee46a08896992846576, type: 2}
     - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: 0}
-      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: e8c5f745fff0f7848b88745736a41157, type: 2}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 3014b6c4e9aa8ee46a08896992846576, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: 8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 001b22b5f2f6155469c7c670964c2065, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 0, y: 0, z: -8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 001b22b5f2f6155469c7c670964c2065, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 2, y: 0, z: -8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 001b22b5f2f6155469c7c670964c2065, type: 2}
+    - <SpawnPosition>k__BackingField: {x: -2, y: 0, z: -8}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 001b22b5f2f6155469c7c670964c2065, type: 2}
+    - <SpawnPosition>k__BackingField: {x: 3, y: 0, z: -6}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 001b22b5f2f6155469c7c670964c2065, type: 2}
+    - <SpawnPosition>k__BackingField: {x: -3, y: 0, z: -6}
+      <EnemyConfig>k__BackingField: {fileID: 11400000, guid: 001b22b5f2f6155469c7c670964c2065, type: 2}
   <AbilityDropOptionsConfig>k__BackingField: {fileID: 11400000, guid: cc52618c973a80845b70ac07bf31d850, type: 2}

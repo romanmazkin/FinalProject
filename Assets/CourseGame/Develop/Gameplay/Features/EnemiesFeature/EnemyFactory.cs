@@ -12,9 +12,15 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.EnemiesFeature
 {
     public class EnemyFactory
     {
+        private const string LightGhostPrefabPath = "Gameplay/Creatures/GhostLight";
+        private const string MediumGhostPrefabPath = "Gameplay/Creatures/GhostMedium";
+        private const string HardGhostPrefabPath = "Gameplay/Creatures/GhostHard";
+        private const string ExtraHardGhostPrefabPath = "Gameplay/Creatures/GhostExtraHard";
+        private const string BossGhostPrefabPath = "Gameplay/Creatures/GhostBoss";
+        private readonly int _team = TeamTypes.Enemies;
+
         private EntityFactory _entityFactory;
         private AIFactory _aIFactory;
-        private readonly int _team = TeamTypes.Enemies;
 
         private EntitiesBuffer _entitiesBuffer;
         private DropLootService _dropLootService;
@@ -34,8 +40,28 @@ namespace Assets.CourseGame.Develop.Gameplay.Features.EnemiesFeature
 
             switch (config)
             {
-                case GhostConfig ghostConfig:
-                    entity = _entityFactory.CreateGhost(position, ghostConfig, _team);
+                case LightGhostConfig lightGhostConfig:
+                    entity = _entityFactory.CreateGhost(position, lightGhostConfig, _team, LightGhostPrefabPath);
+                    brain = _aIFactory.CreateGhostBehaviour(entity);
+                    break;
+
+                case MediumGhostConfig mediumGhostConfig:
+                    entity = _entityFactory.CreateGhost(position, mediumGhostConfig, _team, MediumGhostPrefabPath);
+                    brain = _aIFactory.CreateGhostBehaviour(entity);
+                    break;
+
+                case HardGhostConfig hardGhostConfig:
+                    entity = _entityFactory.CreateGhost(position, hardGhostConfig, _team, HardGhostPrefabPath);
+                    brain = _aIFactory.CreateGhostBehaviour(entity);
+                    break;
+
+                case ExtraHardGhostConfig extraHardGhostConfig:
+                    entity = _entityFactory.CreateGhost(position, extraHardGhostConfig, _team, ExtraHardGhostPrefabPath);
+                    brain = _aIFactory.CreateGhostBehaviour(entity);
+                    break;
+
+                case BossGhostConfig bossGhostConfig:
+                    entity = _entityFactory.CreateGhost(position, bossGhostConfig, _team, BossGhostPrefabPath);
                     brain = _aIFactory.CreateGhostBehaviour(entity);
                     break;
 

@@ -2,7 +2,7 @@
 {
     public enum CurrencyTypes
     {
-        Gold,
-        Diamond
+        Gold
+        //Diamond
     }
 }

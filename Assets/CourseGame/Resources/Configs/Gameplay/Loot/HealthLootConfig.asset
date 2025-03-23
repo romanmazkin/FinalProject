@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: health1
   <Prefab>k__BackingField: {fileID: 1358948302075200313, guid: 6d67ece9cdcfe0c43a6027bee760fc44, type: 3}
-  <Health>k__BackingField: 300
+  <Health>k__BackingField: 50

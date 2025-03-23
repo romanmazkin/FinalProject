@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: coins1
   <Prefab>k__BackingField: {fileID: 6837282529838649565, guid: 0e9f3af7204790944a28b2d53ceeb79e, type: 3}
-  <Coins>k__BackingField: 5
+  <Coins>k__BackingField: 10

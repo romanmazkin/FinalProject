@@ -51,10 +51,7 @@ namespace Assets.CourseGame.Develop.Gameplay.States
 
         public void Update(float deltaTime)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
                 _sceneSwitcher.ProcessSwitchSceneFor(new OutputGameplayArgs(new MainMenuInputArgs()));
-            }
         }
     }
 }

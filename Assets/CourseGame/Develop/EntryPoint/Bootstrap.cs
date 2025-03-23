@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using Assets.CourceGame.Develop.DI;
 using Assets.CourseGame.Develop.CommonServices.LoadingScreen;
